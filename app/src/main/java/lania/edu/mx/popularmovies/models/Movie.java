@@ -10,27 +10,43 @@ public class Movie {
     /**
      * Original title.
      */
-    private String title;
+    private final String title;
 
     /**
      * Movie poster image name.
      */
-    private String imageName;
+    private final String imageName;
 
     /**
      * Plot synopsis.
      */
-    private String synopsis;
+    private final String synopsis;
 
     /**
      * User raiting.
      */
-    private int raiting;
+    private final float popularity;
 
     /**
      * Release date.
      */
-    private Date releaseDate;
+    private final Date releaseDate;
+
+    /**
+     * Allows to construct an instance of this class to encapsulate the movie with its data.
+     * @param title Title of the movie.
+     * @param imageName Image name of the movie.
+     * @param synopsis Synopsis of the movie.
+     * @param popularity Rainting of the movie.
+     * @param releaseDate Release date of the movie.
+     */
+    public Movie(String title, String imageName, String synopsis, float popularity, Date releaseDate) {
+        this.title = title;
+        this.imageName = imageName;
+        this.synopsis = synopsis;
+        this.popularity = popularity;
+        this.releaseDate = releaseDate;
+    }
 
     /**
      * Allows to get the Original title.
@@ -38,14 +54,6 @@ public class Movie {
      */
     public String getTitle() {
         return title;
-    }
-
-    /**
-     * Allows to set the Original title.
-     * @param title Original title.
-     */
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     /**
@@ -57,14 +65,6 @@ public class Movie {
     }
 
     /**
-     * Allows to set the Movie poster image name.
-     * @param imageName Movie poster image name.
-     */
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
-    /**
      * Allows to get the Plot synopsis.
      * @return Plot synopsis.
      */
@@ -73,27 +73,11 @@ public class Movie {
     }
 
     /**
-     * Allows to set the Plot synopsis.
-     * @param synopsis Plot synopsis.
-     */
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
-
-    /**
      * Allows to get the User raiting.
      * @return User raiting.
      */
-    public int getRaiting() {
-        return raiting;
-    }
-
-    /**
-     * Allows to set the User raiting.
-     * @param raiting
-     */
-    public void setRaiting(int raiting) {
-        this.raiting = raiting;
+    public float getPopularity() {
+        return popularity;
     }
 
     /**
@@ -102,13 +86,5 @@ public class Movie {
      */
     public Date getReleaseDate() {
         return releaseDate;
-    }
-
-    /**
-     * Allows to set the Release date.
-     * @param releaseDate Release date.
-     */
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
     }
 }

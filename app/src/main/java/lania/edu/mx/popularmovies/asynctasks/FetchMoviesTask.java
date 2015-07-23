@@ -2,6 +2,7 @@ package lania.edu.mx.popularmovies.asynctasks;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -11,44 +12,45 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import lania.edu.mx.popularmovies.models.Movie;
-import lania.edu.mx.popularmovies.models.WeatherDataParser;
+import lania.edu.mx.popularmovies.tos.MovieConverter;
+import lania.edu.mx.popularmovies.models.SortOption;
+import lania.edu.mx.popularmovies.tos.MovieResponse;
+import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
 
 /**
  * Created by clemente on 7/22/15.
  */
-public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
 
-    private MoviesListener moviesListener;
+    private MovieListener movieListener;
 
-    public interface MoviesListener {
-        void onUpdate(List<Movie> data);
+    public interface MovieListener {
+        void update(List<Movie> data);
     }
 
-    public FetchMoviesTask(MoviesListener moviesListener) {
-        this.moviesListener = moviesListener;
+    public FetchMoviesTask(MovieListener movieListener) {
+        this.movieListener = movieListener;
     }
 
     @Override
-    protected List<Movie> doInBackground(String... params) {
-        getRealData("","");
-        return null;
+    protected List<Movie> doInBackground(SortOption... params) {
+        SortOption sortOption = params[0];
+        return getRealData(SortOption.POPULARITY);
     }
 
-    private List<String> getRealData(String postalCode, String unitType) {
+    private List<Movie> getRealData(SortOption sortOption) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
-        String forecastJson = "";
-        int numberOfDays = 7;
-        List<String> result = null;
+        String jsonMovies = "";
+        List<Movie> result = new ArrayList<>();
         try {
-            Uri uri = Uri.parse("http://api.openweathermap.org/data/2.5/forecast/daily").buildUpon()
-                    .appendQueryParameter("q", postalCode).appendQueryParameter("mode", "json")
-                    .appendQueryParameter("units", unitType).appendQueryParameter("cnt", "" + numberOfDays).build();
+            Uri uri = Uri.parse("http://api.themoviedb.org/3/discover/movie").buildUpon()
+                    .appendQueryParameter("sort_by", sortOption.getOrder())
+                    .appendQueryParameter("api_key", getKey()).build();
 
             Log.d(TAG, uri.toString());
             URL url = new URL(uri.toString());
@@ -56,7 +58,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
-
 
             InputStream inputStream = connection.getInputStream();
             StringBuffer buffer = new StringBuffer();
@@ -75,9 +76,11 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             if (buffer.length() == 0)
                 return null;
 
-            forecastJson = buffer.toString();
-            Log.d(TAG, forecastJson);
-            result = new ArrayList<String>(Arrays.asList(WeatherDataParser.getWeatherDataFromJson(forecastJson, numberOfDays)));
+            jsonMovies = buffer.toString();
+            Log.d(TAG, jsonMovies);
+            MovieResponse response = JsonSerializacionHelper.deserializarObjecto(MovieResponse.class, jsonMovies);
+            Log.d(TAG, ""+response);
+            result = MovieConverter.toModel(response);
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -95,8 +98,17 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             }
         }
 
-
         return result;
+    }
 
+    @NonNull
+    private String getKey() {
+        return "";
+    }
+
+    @Override
+    protected void onPostExecute(List<Movie> movies) {
+        super.onPostExecute(movies);
+        movieListener.update(movies);
     }
 }

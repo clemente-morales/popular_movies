@@ -11,7 +11,7 @@
 
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -31,7 +31,6 @@
         <TextView
             android:id="@+id/movieSynopsisTextView"
             android:maxLines="6"
-            android:minLines="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/movieTitleTextView"/>
@@ -52,15 +51,12 @@
             android:layout_below="@+id/movieSynopsisTextView"/>
 
         <RatingBar
-            android:id="@+id/movieRatingBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5"
+            android:id="@+id/movieRatingBar"
+            android:numStars="4"
             android:stepSize="0.1"
-            style="?android:attr/ratingBarStyleIndicator"
-            android:isIndicator="true"
-            android:layout_below="@+id/movieReleaseLabelTextView"
-            android:layout_alignParentBottom="true"/>
+            android:layout_below="@+id/movieReleaseLabelTextView"/>
     </RelativeLayout>
 
 

@@ -75,6 +75,7 @@ public class MovieListAdapter extends BaseAdapter {
             holder.title = (TextView) convertView.findViewById(R.id.movieTitleTextView);
             holder.synopsis = (TextView) convertView.findViewById(R.id.movieSynopsisTextView);
             holder.release = (TextView) convertView.findViewById(R.id.movieReleaseDateTextView);
+            holder.raitingBar = (RatingBar) convertView.findViewById(R.id.movieRatingBar);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -84,7 +85,7 @@ public class MovieListAdapter extends BaseAdapter {
         holder.title.setText(movie.getTitle());
         holder.synopsis.setText(movie.getSynopsis());
         holder.release.setText(formatDate(movie.getReleaseDate()));
-        holder.raitingBar.setRating(movie.getRaiting());
+        holder.raitingBar.setRating(movie.getPopularity());
         displayImage(movie.getImageName(), holder.thumbailImage);
 
         return convertView;
@@ -107,7 +108,7 @@ public class MovieListAdapter extends BaseAdapter {
      * @return Release date in the format dd/MM/yyyy.
      */
     private String formatDate(Date releaseDate) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(releaseDate);
     }
 
