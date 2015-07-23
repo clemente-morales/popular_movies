@@ -47,3 +47,5 @@ gradlew.bat
 
 gradle/
 gradlew
+
+app/src/main/assets/configuration.properties

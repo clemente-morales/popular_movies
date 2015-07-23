@@ -1,5 +1,6 @@
 package lania.edu.mx.popularmovies.asynctasks;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -14,9 +15,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import lania.edu.mx.popularmovies.DependencyModuleApplication;
 import lania.edu.mx.popularmovies.models.Movie;
-import lania.edu.mx.popularmovies.tos.MovieConverter;
 import lania.edu.mx.popularmovies.models.SortOption;
+import lania.edu.mx.popularmovies.tos.MovieConverter;
 import lania.edu.mx.popularmovies.tos.MovieResponse;
 import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
 
@@ -25,6 +27,7 @@ import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
  */
 public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
+    private final Context context;
 
     private MovieListener movieListener;
 
@@ -32,7 +35,8 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
         void update(List<Movie> data);
     }
 
-    public FetchMoviesTask(MovieListener movieListener) {
+    public FetchMoviesTask(Context context, MovieListener movieListener) {
+        this.context = context;
         this.movieListener = movieListener;
     }
 
@@ -77,9 +81,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
                 return null;
 
             jsonMovies = buffer.toString();
-            Log.d(TAG, jsonMovies);
             MovieResponse response = JsonSerializacionHelper.deserializarObjecto(MovieResponse.class, jsonMovies);
-            Log.d(TAG, ""+response);
             result = MovieConverter.toModel(response);
 
         } catch (Exception e) {
@@ -103,7 +105,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
 
     @NonNull
     private String getKey() {
-        return "";
+        return DependencyModuleApplication.getProperties(context).getProperty("themoviedb_api_key");
     }
 
     @Override

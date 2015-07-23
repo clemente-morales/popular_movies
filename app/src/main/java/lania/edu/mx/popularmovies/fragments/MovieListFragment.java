@@ -29,7 +29,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new FetchMoviesTask(this).execute(SortOption.POPULARITY);
+        new FetchMoviesTask(getActivity(), this).execute(SortOption.POPULARITY);
     }
 
     @Override
