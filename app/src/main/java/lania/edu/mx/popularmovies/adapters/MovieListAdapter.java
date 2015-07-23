@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -83,21 +85,24 @@ public class MovieListAdapter extends BaseAdapter {
         holder.synopsis.setText(movie.getSynopsis());
         holder.release.setText(formatDate(movie.getReleaseDate()));
         holder.raitingBar.setRating(movie.getRaiting());
-        displayImage(movie.getImageName());
+        displayImage(movie.getImageName(), holder.thumbailImage);
 
         return convertView;
     }
 
     /**
      * Allows to display the movie thumbail image
+     *
      * @param imageName Name of the image to display.
+     * @param imageView Control to display the thumbail image for the movie
      */
-    private void displayImage(String imageName) {
-        // TODO Display image with picasso.
+    private void displayImage(String imageName, ImageView imageView) {
+        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
     }
 
     /**
      * Format {@link Date} to dd/MM/yyyy.
+     *
      * @param releaseDate Release date of a movie.
      * @return Release date in the format dd/MM/yyyy.
      */
