@@ -1,9 +1,11 @@
-package lania.edu.mx.popularmovies;
+package lania.edu.mx.popularmovies.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import lania.edu.mx.popularmovies.R;
 
 public class MovieDetailActivity extends AppCompatActivity {
 

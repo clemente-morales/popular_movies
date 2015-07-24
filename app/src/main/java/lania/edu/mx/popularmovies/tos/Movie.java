@@ -37,6 +37,9 @@ public class Movie {
     @JsonProperty("vote_average")
     private float populariy;
 
+    @JsonProperty("original_language")
+    private String language;
+
     public boolean isAdultTarget() {
         return adultTarget;
     }
@@ -100,6 +103,14 @@ public class Movie {
 
     public void setPopulariy(float populariy) {
         this.populariy = populariy;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

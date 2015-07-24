@@ -1,7 +1,55 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/movieThumbailImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/movieTitleLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/movieThumbailImageView"
+        android:text="@string/movieTitleLabel"
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/movieTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/movieTitleLabelTextView" />
+
+    <TextView
+        android:id="@+id/movieSynopsisTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieTitleTextView" />
+
+    <TextView
+        android:id="@+id/movieReleaseLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieSynopsisTextView"
+        android:text="@string/movieReleaseDateLabel"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/movieReleaseDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieSynopsisTextView"
+        android:layout_toRightOf="@id/movieReleaseLabelTextView" />
+
+    <RatingBar
+        android:id="@+id/movieRatingBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieReleaseLabelTextView"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.1" />
+</RelativeLayout>

@@ -86,7 +86,7 @@ public class MovieListAdapter extends BaseAdapter {
         holder.synopsis.setText(movie.getSynopsis());
         holder.release.setText(formatDate(movie.getReleaseDate()));
         holder.raitingBar.setRating(movie.getPopularity());
-        displayImage(movie.getImageName(), holder.thumbailImage);
+        displayImage(movie.getBackDropImageName(), holder.thumbailImage);
 
         return convertView;
     }
