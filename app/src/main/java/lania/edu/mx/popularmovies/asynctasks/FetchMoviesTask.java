@@ -92,7 +92,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
                 return null;
 
             jsonMovies = buffer.toString();
-            MovieResponse response = JsonSerializacionHelper.deserializarObjecto(MovieResponse.class, jsonMovies);
+            MovieResponse response = JsonSerializacionHelper.deserializeObject(MovieResponse.class, jsonMovies);
             result = MovieConverter.toModel(response);
 
         } catch (Exception e) {

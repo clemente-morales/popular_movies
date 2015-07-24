@@ -2,37 +2,34 @@ package lania.edu.mx.popularmovies.utils;
 
 import android.app.Activity;
 
-import lania.edu.mx.popularmovies.fragments.DialogoProgresoIndefinido;
-import lania.edu.mx.popularmovies.models.DatosDialogo;
+import lania.edu.mx.popularmovies.fragments.IndeterminateProgressDialog;
+import lania.edu.mx.popularmovies.models.DialogData;
 
 /**
+ * Class used to provide helper methods for the user interface.
  * Created by clemente on 7/24/15.
  */
 public class UserInterfaceHelper {
     /**
-     * Método auxiliar para mostrar un diálogo de progreso.
+     * Shows an indeterminate progress dialog.
      *
-     * @param activity
-     *            Actividad contextualizada en la que se mostrará el diálogo de
-     *            progreso.
-     * @param datosDialogo
-     *            Datos del diálogo a mostrar.
-     * @param idDialogo
-     *            Identificador del dialogo.
+     * @param activity Holder Activity where we want to show the progress dialog.
+     * @param dialogData Data for the dialog.
+     * @param dialogId Id of the dialog.
      */
-    public static void mostrarDialogoProgreso(final Activity activity,
-                                              final DatosDialogo datosDialogo, final String idDialogo) {
+    public static void displayProgressDialog(final Activity activity,
+                                             final DialogData dialogData, final String dialogId) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DialogoProgresoIndefinido dialogoProgresoIndefinido
-                        = (DialogoProgresoIndefinido) activity
-                        .getFragmentManager().findFragmentByTag(idDialogo);
-                if (dialogoProgresoIndefinido == null) {
-                    dialogoProgresoIndefinido = DialogoProgresoIndefinido
-                            .nuevaInstancia(datosDialogo);
-                    dialogoProgresoIndefinido.show(
-                            activity.getFragmentManager(), idDialogo);
+                IndeterminateProgressDialog indeterminateProgressDialog
+                        = (IndeterminateProgressDialog) activity
+                        .getFragmentManager().findFragmentByTag(dialogId);
+                if (indeterminateProgressDialog == null) {
+                    indeterminateProgressDialog = indeterminateProgressDialog
+                            .newInstance(dialogData);
+                    indeterminateProgressDialog.show(
+                            activity.getFragmentManager(), dialogId);
                     activity.getFragmentManager().executePendingTransactions();
                 }
             }
@@ -40,24 +37,21 @@ public class UserInterfaceHelper {
     }
 
     /**
-     * Método utilizado para eliminar un diálogo de progreso indefinido.
+     * Removes a progress dialog currently active.
      *
-     * @param activity
-     *            Actividad en la que se eliminará el diálogo de progreso
-     *            indefinido.
-     * @param idDialogo
-     *            Identificador del dialogo.
+     * @param activity Actiivity where the dialog is running.
+     * @param dialogId Id of the dialog to remove.
      */
-    public static void eliminarDialogoProgreso(final Activity activity,
-                                               final String idDialogo) {
+    public static void deleteProgressDialog(final Activity activity,
+                                            final String dialogId) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DialogoProgresoIndefinido dialogoProgresoFragment
-                        = (DialogoProgresoIndefinido) activity
-                        .getFragmentManager().findFragmentByTag(idDialogo);
-                if (dialogoProgresoFragment != null) {
-                    dialogoProgresoFragment.dismiss();
+                IndeterminateProgressDialog indeterminateProgressDialog
+                        = (IndeterminateProgressDialog) activity
+                        .getFragmentManager().findFragmentByTag(dialogId);
+                if (indeterminateProgressDialog != null) {
+                    indeterminateProgressDialog.dismiss();
                     activity.getFragmentManager().executePendingTransactions();
                 }
             }
