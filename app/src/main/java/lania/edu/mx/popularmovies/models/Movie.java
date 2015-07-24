@@ -13,6 +13,16 @@ import java.util.Date;
  */
 public class Movie implements Parcelable {
     /**
+     * Max popularity given to a movie.
+     */
+    public static final int MAX_POPULARITY = 10;
+
+    /**
+     * Max number of starts for the popularity of a movie.
+     */
+    public static final int MAX_STARTS = 5;
+
+    /**
      * Original title.
      */
     private final String title;
@@ -49,8 +59,14 @@ public class Movie implements Parcelable {
     private final String language;
 
     /**
+     * Identifier of the movie.
+     */
+    private final int id;
+
+    /**
      * Allows to construct an instance of this class to encapsulate the movie with its data.
      *
+     * @param id                Id of the movie.
      * @param title             Title of the movie.
      * @param posterImageName   Image name of the movie.
      * @param synopsis          Synopsis of the movie.
@@ -59,7 +75,8 @@ public class Movie implements Parcelable {
      * @param backDropImageName Movie backdrop image name.
      * @param language          Original language of the movie.
      */
-    public Movie(String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, String language) {
+    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, String language) {
+        this.id = id;
         this.title = title;
         this.posterImageName = posterImageName;
         this.synopsis = synopsis;
@@ -75,6 +92,7 @@ public class Movie implements Parcelable {
      * @param source Parcle with the movie data.
      */
     private Movie(Parcel source) {
+        this.id = source.readInt();
         this.title = source.readString();
         this.posterImageName = source.readString();
         this.synopsis = source.readString();
@@ -135,7 +153,7 @@ public class Movie implements Parcelable {
      * @return User raiting.
      */
     public float getPopularity() {
-        return (popularity / 10) * 5;
+        return (popularity / MAX_POPULARITY) * MAX_STARTS;
     }
 
     /**
@@ -177,6 +195,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(posterImageName);
         dest.writeString(synopsis);

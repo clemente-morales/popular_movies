@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -109,7 +111,7 @@ public class MovieListAdapter extends BaseAdapter {
      */
     private String formatDate(Date releaseDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(releaseDate);
+        return releaseDate != null ? simpleDateFormat.format(releaseDate) : StringUtils.EMPTY;
     }
 
     /**

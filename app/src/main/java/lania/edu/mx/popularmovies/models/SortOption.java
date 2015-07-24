@@ -8,7 +8,7 @@ import android.util.SparseArray;
  */
 public enum SortOption {
     POPULARITY(SortOption.POPULARITY_ID, "popularity.desc"),
-    RAITING(SortOption.RAITING_ID, "popularity.desc");
+    RAITING(SortOption.RAITING_ID, "vote_average.desc");
 
     private static final String TAG = SortOption.class.getSimpleName();
     private static final int POPULARITY_ID = 1;

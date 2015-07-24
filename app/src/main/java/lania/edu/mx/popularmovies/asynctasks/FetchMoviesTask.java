@@ -27,6 +27,10 @@ import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
  */
 public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
+    public static final String BASE_URI_TO_DISCOVER_MOVIES = "http://api.themoviedb.org/3/discover/movie";
+    public static final String SORT_BY_PARAMETER = "sort_by";
+    public static final String API_KEY_PARAMETER = "api_key";
+    public static final String MOVIEDB_API_KEY_PROPERTY = "themoviedb_api_key";
     private final Context context;
 
     private MovieListener movieListener;
@@ -43,7 +47,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     @Override
     protected List<Movie> doInBackground(SortOption... params) {
         SortOption sortOption = params[0];
-        return getRealData(SortOption.POPULARITY);
+        return getRealData(sortOption);
     }
 
     private List<Movie> getRealData(SortOption sortOption) {
@@ -52,9 +56,9 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
         String jsonMovies = "";
         List<Movie> result = new ArrayList<>();
         try {
-            Uri uri = Uri.parse("http://api.themoviedb.org/3/discover/movie").buildUpon()
-                    .appendQueryParameter("sort_by", sortOption.getOrder())
-                    .appendQueryParameter("api_key", getKey()).build();
+            Uri uri = Uri.parse(BASE_URI_TO_DISCOVER_MOVIES).buildUpon()
+                    .appendQueryParameter(SORT_BY_PARAMETER, sortOption.getOrder())
+                    .appendQueryParameter(API_KEY_PARAMETER, getKey()).build();
 
             Log.d(TAG, uri.toString());
             URL url = new URL(uri.toString());
@@ -105,7 +109,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
 
     @NonNull
     private String getKey() {
-        return DependencyModuleApplication.getProperties(context).getProperty("themoviedb_api_key");
+        return DependencyModuleApplication.getProperties(context).getProperty(MOVIEDB_API_KEY_PROPERTY);
     }
 
     @Override

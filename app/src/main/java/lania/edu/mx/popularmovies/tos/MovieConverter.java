@@ -12,7 +12,7 @@ public final class MovieConverter {
     }
 
     public static lania.edu.mx.popularmovies.models.Movie toModel(lania.edu.mx.popularmovies.tos.Movie movie) {
-        return new lania.edu.mx.popularmovies.models.Movie(movie.getTitle(), movie.getPosterImage(), movie.getOverview(),
+        return new lania.edu.mx.popularmovies.models.Movie(movie.getId(), movie.getTitle(), movie.getPosterImage(), movie.getOverview(),
                 movie.getPopulariy(), movie.getReleaseDate(), movie.getBackDropImage(), movie.getLanguage());
     }
 

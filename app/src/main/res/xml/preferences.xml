@@ -5,6 +5,7 @@
     <PreferenceCategory android:title="@string/action_settings">
         <ListPreference
             android:dialogTitle="@string/preferences_order_title"
+            android:defaultValue="@string/preferences_order_default_value"
             android:entries="@array/movie_order_entries"
             android:entryValues="@array/movie_order_values"
             android:key="@string/preferences_order_key"

@@ -40,6 +40,8 @@ public class Movie {
     @JsonProperty("original_language")
     private String language;
 
+    private int id;
+
     public boolean isAdultTarget() {
         return adultTarget;
     }
@@ -111,6 +113,14 @@ public class Movie {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
