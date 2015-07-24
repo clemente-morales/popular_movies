@@ -100,7 +100,7 @@ public class MovieListAdapter extends BaseAdapter {
      * @param imageView Control to display the thumbail image for the movie
      */
     private void displayImage(String imageName, ImageView imageView) {
-        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
+        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).placeholder(R.mipmap.not_found_image).into(imageView);
     }
 
     /**
