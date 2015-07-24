@@ -1,67 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="3"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/movieThumbailImageView"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="130dp"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_weight="2"
+    <TextView
+        android:id="@+id/movieTitleLabelTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_toRightOf="@id/movieThumbailImageView"
+        android:text="@string/movieTitleLabel"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/movieTitleLabelTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movieTitleLabel"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/movieTitleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/movieTitleLabelTextView"/>
-
-        <TextView
-            android:id="@+id/movieSynopsisTextView"
-            android:maxLines="6"
-            android:minLines="6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/movieTitleTextView"/>
-
-        <TextView
-            android:id="@+id/movieReleaseLabelTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/movieReleaseDateLabel"
-            android:textStyle="bold"
-            android:layout_below="@+id/movieSynopsisTextView"/>
-
-        <TextView
-            android:id="@+id/movieReleaseDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/movieReleaseLabelTextView"
-            android:layout_below="@+id/movieSynopsisTextView"/>
-
-        <RatingBar
-            android:id="@+id/movieRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="0.1"
-            style="?android:attr/ratingBarStyleIndicator"
-            android:isIndicator="true"
-            android:layout_below="@+id/movieReleaseLabelTextView"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/movieTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/movieTitleLabelTextView" />
 
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/movieReleaseLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieTitleLabelTextView"
+        android:layout_toRightOf="@id/movieThumbailImageView"
+        android:text="@string/movieReleaseDateLabel"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/movieReleaseDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieTitleLabelTextView"
+        android:layout_toRightOf="@id/movieReleaseLabelTextView" />
+
+    <RatingBar
+        android:id="@+id/movieRatingBar"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieReleaseLabelTextView"
+        android:layout_toRightOf="@id/movieThumbailImageView"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.1" />
+
+    <TextView
+        android:id="@+id/movieSynopsisTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movieThumbailImageView"
+        android:maxLines="3"
+        android:minLines="3" />
+</RelativeLayout>
