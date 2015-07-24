@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <PreferenceCategory android:title="@string/action_settings">
+        <ListPreference
+            android:dialogTitle="@string/preferences_order_title"
+            android:entries="@array/movie_order_entries"
+            android:entryValues="@array/movie_order_values"
+            android:key="@string/preferences_order_key"
+            android:title="@string/preferences_order_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

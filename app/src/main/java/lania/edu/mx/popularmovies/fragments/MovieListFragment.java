@@ -1,7 +1,9 @@
 package lania.edu.mx.popularmovies.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,13 +48,33 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
             }
         });
 
-        new FetchMoviesTask(getActivity(), this).execute(SortOption.POPULARITY);
+        new FetchMoviesTask(getActivity(), this).execute(getSortOrder());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        new FetchMoviesTask(getActivity(), this).execute(getSortOrder());
+    }
+
+    private SortOption getSortOrder() {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+
+        String defaultValue = getString(R.string.preferences_order_default_value);
+        String key = getString(R.string.preferences_order_key);
+
+        int orderId = Integer.parseInt(preferences.getString(key, defaultValue));
+
+        return SortOption.valueOf(orderId);
     }
 
     @Override
     public void update(List<Movie> movies) {
         MovieListAdapter adapter = new MovieListAdapter(getActivity(), movies);
-        getMoviesListView().setAdapter(adapter);
+        if (getActivity() != null) {
+            getMoviesListView().setAdapter(adapter);
+        }
     }
 
     private ListView getMoviesListView() {

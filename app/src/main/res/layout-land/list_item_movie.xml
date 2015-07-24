@@ -29,7 +29,7 @@
         android:id="@+id/movieReleaseLabelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieTitleLabelTextView"
+        android:layout_below="@+id/movieTitleTextView"
         android:layout_toRightOf="@id/movieThumbailImageView"
         android:text="@string/movieReleaseDateLabel"
         android:textStyle="bold" />
@@ -38,7 +38,7 @@
         android:id="@+id/movieReleaseDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieTitleLabelTextView"
+        android:layout_below="@+id/movieTitleTextView"
         android:layout_toRightOf="@id/movieReleaseLabelTextView" />
 
     <RatingBar
@@ -56,7 +56,7 @@
         android:id="@+id/movieSynopsisTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/movieThumbailImageView"
+        android:layout_below="@+id/movieRatingBar"
         android:maxLines="3"
         android:minLines="3" />
 </RelativeLayout>
