@@ -36,12 +36,19 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     private MovieListener movieListener;
 
     public interface MovieListener {
+        void onPreExecute();
         void update(List<Movie> data);
     }
 
     public FetchMoviesTask(Context context, MovieListener movieListener) {
         this.context = context;
         this.movieListener = movieListener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        movieListener.onPreExecute();
     }
 
     @Override

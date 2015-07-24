@@ -5,10 +5,13 @@
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="movieTitleLabel">Title:\u0020</string>
     <string name="movieReleaseDateLabel">Release date:\u0020</string>
+    <string name="message_progress_bar">Loading data...</string>
 
     <!-- Movie settings-->
     <string name="action_settings">Movie Settings</string>
     <string name="preferences_order_title">Sort Order</string>
     <string name="preferences_order_key">movieQuerySortOrder</string>
     <string name="preferences_order_default_value">1</string>
+
+
 </resources>
