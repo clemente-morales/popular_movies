@@ -8,11 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
 /**
- * Class to provide the dependencies for the application. I will create the graph to use to inject the
- * dependencies in the application.
+ * Class to provide the dependencies for the application.
  * Created by clemente on 7/23/15.
  */
+@Module
 public class DependencyModuleApplication {
     /**
      * This tag represents this class in the event log.
@@ -23,13 +28,19 @@ public class DependencyModuleApplication {
      * Path to the properties file.
      */
     private static final String PROPERTIES_PATH = "configuration.properties";
+    private final Context context;
+
+    public DependencyModuleApplication(Context context) {
+        this.context = context;
+    }
 
     /**
      * Allows to get the properties file to extract the configuration values for the application.
-     * @param context Context of the running application.
      * @return Properties file to extract the configuration values for the application.
      */
-    public static Properties getProperties(Context context) {
+    @Provides
+    @Singleton
+    public Properties getProperties() {
         Properties properties = new Properties();
 
         try {

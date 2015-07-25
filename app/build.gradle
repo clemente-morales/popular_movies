@@ -21,6 +21,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
     }
 }
 
@@ -34,4 +35,7 @@ dependencies {
     compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.google.dagger:dagger-compiler:2.0.1'
+    compile 'org.glassfish:javax.annotation:10.0-b28'
 }

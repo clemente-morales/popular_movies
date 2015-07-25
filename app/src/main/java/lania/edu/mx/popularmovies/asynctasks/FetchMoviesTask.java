@@ -13,8 +13,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Properties;
 
-import lania.edu.mx.popularmovies.DependencyModuleApplication;
+import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
@@ -37,6 +38,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
 
     public interface MovieListener {
         void onPreExecute();
+
         void update(DataResult<ArrayList<Movie>, Exception> data);
     }
 
@@ -117,7 +119,8 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
 
     @NonNull
     private String getKey() {
-        return DependencyModuleApplication.getProperties(context).getProperty(MOVIEDB_API_KEY_PROPERTY);
+        Properties properties = PopularMoviesApplication.getObjectGraph().providesProperties();
+        return properties.getProperty(MOVIEDB_API_KEY_PROPERTY);
     }
 
     @Override

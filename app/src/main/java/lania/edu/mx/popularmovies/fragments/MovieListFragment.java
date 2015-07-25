@@ -95,9 +95,11 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
             new FetchMoviesTask(getActivity(), this).execute(sortOption);
         } else {
             int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
-            this.sortOption = SortOption.valueOf(selectedSortOption);
-            this.movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
-            displayMovies();
+            sortOption = SortOption.valueOf(selectedSortOption);
+            movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
+            if (movies!=null) {
+                displayMovies();
+            }
         }
     }
 
