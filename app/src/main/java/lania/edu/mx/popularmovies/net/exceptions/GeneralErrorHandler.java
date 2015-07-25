@@ -48,12 +48,12 @@ public class GeneralErrorHandler implements ErrorHandler {
         String errorDescription;        
         
         if (cause == null) {
-            errorDescription = ctx.getString(R.string.RetrofitError_sinConexion);
+            errorDescription = ctx.getString(R.string.RetrofitError_unable_to_connect);
             Log.e(TAG, errorDescription);
             return new NotConectionException(cause);
         } 
         if (cause.getResponse() == null) {
-            errorDescription = ctx.getString(R.string.RetrofitError_sinrespuesta);
+            errorDescription = ctx.getString(R.string.RetrofitError_not_response_back);
             Log.e(TAG, errorDescription);
             return new NotResponseException(cause);
         } 
@@ -62,15 +62,15 @@ public class GeneralErrorHandler implements ErrorHandler {
         
         switch (response.getStatus()) {
         case HttpStatus.SC_UNAUTHORIZED:
-            errorDescription = ctx.getString(R.string.RetrofitError_noAutorizado);
+            errorDescription = ctx.getString(R.string.RetrofitError_unauthorized);
             Log.e(TAG, errorDescription);
             return new UnauthorizedException(cause);   
         case HttpStatus.SC_NOT_FOUND: 
-            errorDescription = ctx.getString(R.string.RetrofitError_noEncontrado);
+            errorDescription = ctx.getString(R.string.RetrofitError_resource_not_found);
             Log.e(TAG, errorDescription);
             return new NotFoundException(cause);
         case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-            errorDescription = ctx.getString(R.string.RetrofitError_errorInterno);
+            errorDescription = ctx.getString(R.string.RetrofitError_internal_server_error);
             Log.e(TAG, errorDescription);
             return new ServerException(cause);
         default:

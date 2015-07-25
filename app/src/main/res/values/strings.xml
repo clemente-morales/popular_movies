@@ -15,10 +15,10 @@
     <string name="preferences_order_default_value">1</string>
 
 
-    <!-- Proxy RetroFit Mensajes -->
-    <string name="RetrofitError_sinConexion">No se ha podido establecer una conexión con el servidor.</string>
-    <string name="RetrofitError_sinrespuesta">Sin Respuesta del servidor.</string>
-    <string name="RetrofitError_noAutorizado">No se encuentra autorizado para ejecutar esta operación.</string>
-    <string name="RetrofitError_noEncontrado">El recurso solicitado no se encuentra disponible.</string>
-    <string name="RetrofitError_errorInterno">Ha ocurrido un error interno en el servidor al realizar la operación. Contacte al administrador.</string>
+    <!-- RetroFi -->
+    <string name="RetrofitError_unable_to_connect">Could not establish connection.</string>
+    <string name="RetrofitError_not_response_back">Not response back from server.</string>
+    <string name="RetrofitError_unauthorized">You are unauthorized to execute this operation.</string>
+    <string name="RetrofitError_resource_not_found">Resource not found.</string>
+    <string name="RetrofitError_internal_server_error">Internal server error. Contac technical support.</string>
 </resources>
