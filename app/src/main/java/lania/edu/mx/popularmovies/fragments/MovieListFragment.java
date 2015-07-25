@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.activities.MovieDetailActivity;
 import lania.edu.mx.popularmovies.adapters.MovieListAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
+import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
@@ -41,6 +43,11 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      * Key to restore de selected sort option.
      */
     public static final String SELECTED_SORT_OPTION_KEY = "SelectedSortOption";
+
+    /**
+     * Tag for the progress dialog.
+     */
+    public static final String PROGRESS_DIALOG_TAG = "LoadingData";
 
     /**
      * List of movies, currently displayed.
@@ -112,22 +119,26 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     }
 
     @Override
-    public void update(ArrayList<Movie> movies) {
-        this.movies = movies;
-        displayMovies();
+    public void update(DataResult<ArrayList<Movie>, Exception> moviesResult) {
+        UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
+        if (!moviesResult.isException()) {
+            this.movies = moviesResult.getData();
+            displayMovies();
+        } else {
+            Toast.makeText(getActivity(),R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void displayMovies() {
         MovieListAdapter adapter = new MovieListAdapter(getActivity(), movies);
         if (getActivity() != null) {
-            UserInterfaceHelper.deleteProgressDialog(getActivity(), "LoadingData");
             getMoviesListView().setAdapter(adapter);
         }
     }
 
     @Override
     public void onPreExecute() {
-        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), "LoadingData");
+        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
     }
 
     /**

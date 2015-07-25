@@ -6,6 +6,7 @@
     <string name="movieTitleLabel">Title:\u0020</string>
     <string name="movieReleaseDateLabel">Release date:\u0020</string>
     <string name="message_progress_bar">Loading data...</string>
+    <string name="error_connection_message">Error getting the data. Try it later.</string>
 
     <!-- Movie settings-->
     <string name="action_settings">Movie Settings</string>

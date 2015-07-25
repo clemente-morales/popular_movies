@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import lania.edu.mx.popularmovies.DependencyModuleApplication;
+import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
 import lania.edu.mx.popularmovies.tos.MovieConverter;
@@ -24,7 +25,7 @@ import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
 /**
  * Created by clemente on 7/22/15.
  */
-public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie>> {
+public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<ArrayList<Movie>, Exception>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
     public static final String BASE_URI_TO_DISCOVER_MOVIES = "http://api.themoviedb.org/3/discover/movie";
     public static final String SORT_BY_PARAMETER = "sort_by";
@@ -36,7 +37,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie
 
     public interface MovieListener {
         void onPreExecute();
-        void update(ArrayList<Movie> data);
+        void update(DataResult<ArrayList<Movie>, Exception> data);
     }
 
     public FetchMoviesTask(Context context, MovieListener movieListener) {
@@ -51,12 +52,12 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie
     }
 
     @Override
-    protected ArrayList<Movie> doInBackground(SortOption... params) {
+    protected DataResult<ArrayList<Movie>, Exception> doInBackground(SortOption... params) {
         SortOption sortOption = params[0];
         return getRealData(sortOption);
     }
 
-    private ArrayList<Movie> getRealData(SortOption sortOption) {
+    private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         String jsonMovies = "";
@@ -96,6 +97,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
+            return DataResult.createExceptionResult(e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -110,7 +112,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie
             }
         }
 
-        return result;
+        return DataResult.createDataResult(result);
     }
 
     @NonNull
@@ -119,8 +121,8 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Movie> movies) {
-        super.onPostExecute(movies);
-        movieListener.update(movies);
+    protected void onPostExecute(DataResult<ArrayList<Movie>, Exception> moviesResult) {
+        super.onPostExecute(moviesResult);
+        movieListener.update(moviesResult);
     }
 }
