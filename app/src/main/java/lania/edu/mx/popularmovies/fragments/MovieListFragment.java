@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.activities.MovieDetailActivity;
@@ -27,7 +27,30 @@ import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
  * Created by clemente on 7/22/15.
  */
 public class MovieListFragment extends Fragment implements FetchMoviesTask.MovieListener {
-    public static final String MOVIE_DATA = "MovieData";
+    /**
+     * Data to pass to de detail of the movie.
+     */
+    public static final String MOVIE_DATA_EXTRA = "MovieData";
+
+    /**
+     * Key to restore the movies.
+     */
+    public static final String LIST_OF_MOVIES_KEY = "ListOfMovies";
+
+    /**
+     * Key to restore de selected sort option.
+     */
+    public static final String SELECTED_SORT_OPTION_KEY = "SelectedSortOption";
+
+    /**
+     * List of movies, currently displayed.
+     */
+    private ArrayList<Movie> movies;
+
+    /**
+     * Selected sort option.
+     */
+    private SortOption sortOption;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,22 +69,55 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
                 MovieListAdapter adapter = (MovieListAdapter) parent.getAdapter();
                 Movie movie = (Movie) adapter.getItem(position);
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra(MOVIE_DATA, movie);
+                intent.putExtra(MOVIE_DATA_EXTRA, movie);
                 getActivity().startActivity(intent);
             }
         });
 
-        new FetchMoviesTask(getActivity(), this).execute(getSortOrderFromPreferences());
+        restoreMovieState(savedInstanceState);
+    }
+
+    /**
+     * Allows to restore the previous state of the fragment.
+     *
+     * @param savedInstanceState Previous state of the fragment..
+     */
+    private void restoreMovieState(Bundle savedInstanceState) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
+            sortOption = getSortOrderFromPreferences();
+            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+        } else {
+            int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
+            this.sortOption = SortOption.valueOf(selectedSortOption);
+            this.movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
+            displayMovies();
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new FetchMoviesTask(getActivity(), this).execute(getSortOrderFromPreferences());
+        // if the user is returning from the settings,  we check if the selection order was change to launch the query again.
+        if (sortOption != getSortOrderFromPreferences()) {
+            sortOption = getSortOrderFromPreferences();
+            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+        }
     }
 
     @Override
-    public void update(List<Movie> movies) {
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(LIST_OF_MOVIES_KEY, movies);
+        outState.putInt(SELECTED_SORT_OPTION_KEY, sortOption.getId());
+    }
+
+    @Override
+    public void update(ArrayList<Movie> movies) {
+        this.movies = movies;
+        displayMovies();
+    }
+
+    private void displayMovies() {
         MovieListAdapter adapter = new MovieListAdapter(getActivity(), movies);
         if (getActivity() != null) {
             UserInterfaceHelper.deleteProgressDialog(getActivity(), "LoadingData");
@@ -77,6 +133,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     /**
      * Get the sorter order to query the movies from the preferences manager. This value can be set in
      * the settings option from the menu.
+     *
      * @return Sorter order to query the movies.
      */
     private SortOption getSortOrderFromPreferences() {
@@ -93,6 +150,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
 
     /**
      * Creates the Data to show in the indeterminate progress dialog.
+     *
      * @return Data to show in the indeterminate progress dialog.
      */
     private DialogData buildDialogData() {
@@ -101,6 +159,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
 
     /**
      * Returns the ListView control to display the movies.
+     *
      * @return ListView control to display the movies.
      */
     private ListView getMoviesListView() {

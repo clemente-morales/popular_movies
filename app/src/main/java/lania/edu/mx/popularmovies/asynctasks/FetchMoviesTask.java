@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import lania.edu.mx.popularmovies.DependencyModuleApplication;
 import lania.edu.mx.popularmovies.models.Movie;
@@ -25,7 +24,7 @@ import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
 /**
  * Created by clemente on 7/22/15.
  */
-public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
+public class FetchMoviesTask extends AsyncTask<SortOption, Void, ArrayList<Movie>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
     public static final String BASE_URI_TO_DISCOVER_MOVIES = "http://api.themoviedb.org/3/discover/movie";
     public static final String SORT_BY_PARAMETER = "sort_by";
@@ -37,7 +36,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
 
     public interface MovieListener {
         void onPreExecute();
-        void update(List<Movie> data);
+        void update(ArrayList<Movie> data);
     }
 
     public FetchMoviesTask(Context context, MovieListener movieListener) {
@@ -52,16 +51,16 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     }
 
     @Override
-    protected List<Movie> doInBackground(SortOption... params) {
+    protected ArrayList<Movie> doInBackground(SortOption... params) {
         SortOption sortOption = params[0];
         return getRealData(sortOption);
     }
 
-    private List<Movie> getRealData(SortOption sortOption) {
+    private ArrayList<Movie> getRealData(SortOption sortOption) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
         String jsonMovies = "";
-        List<Movie> result = new ArrayList<>();
+        ArrayList<Movie> result = new ArrayList<>();
         try {
             Uri uri = Uri.parse(BASE_URI_TO_DISCOVER_MOVIES).buildUpon()
                     .appendQueryParameter(SORT_BY_PARAMETER, sortOption.getOrder())
@@ -120,7 +119,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, List<Movie>> {
     }
 
     @Override
-    protected void onPostExecute(List<Movie> movies) {
+    protected void onPostExecute(ArrayList<Movie> movies) {
         super.onPostExecute(movies);
         movieListener.update(movies);
     }

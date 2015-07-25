@@ -103,6 +103,6 @@ public class MovieDetailActivityFragment extends Fragment {
      */
     private void extractMovieDetailDataFromIntent() {
         Intent intent = getActivity().getIntent();
-        this.movie = intent.getParcelableExtra(MovieListFragment.MOVIE_DATA);
+        this.movie = intent.getParcelableExtra(MovieListFragment.MOVIE_DATA_EXTRA);
     }
 }

@@ -1,7 +1,6 @@
 package lania.edu.mx.popularmovies.tos;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by clemente on 7/23/15.
@@ -16,8 +15,8 @@ public final class MovieConverter {
                 movie.getPopulariy(), movie.getReleaseDate(), movie.getBackDropImage(), movie.getLanguage());
     }
 
-    public static List<lania.edu.mx.popularmovies.models.Movie> toModel(MovieResponse response) {
-        List<lania.edu.mx.popularmovies.models.Movie> movies = new ArrayList<lania.edu.mx.popularmovies.models.Movie>();
+    public static ArrayList<lania.edu.mx.popularmovies.models.Movie> toModel(MovieResponse response) {
+        ArrayList<lania.edu.mx.popularmovies.models.Movie> movies = new ArrayList<lania.edu.mx.popularmovies.models.Movie>();
 
         for (lania.edu.mx.popularmovies.tos.Movie movie : response.getMovies()) {
             movies.add(toModel(movie));
