@@ -11,6 +11,7 @@ import javax.inject.Inject;
  */
 public class PopularMoviesApplication extends Application {
     private static PopularMoviesApplication context;
+    private static ApplicationComponents component;
 
     @Override
     public void onCreate() {
@@ -19,10 +20,12 @@ public class PopularMoviesApplication extends Application {
     }
 
     public static ApplicationComponents getObjectGraph() {
-        ApplicationComponents component =
-                DaggerApplicationComponents.builder()
-                        .dependencyModuleApplication(
-                                new DependencyModuleApplication(context)).build();
+        if (component == null) {
+            component =
+                    DaggerApplicationComponents.builder()
+                            .dependencyModuleApplication(
+                                    new DependencyModuleApplication(context)).build();
+        }
         return component;
     }
 }

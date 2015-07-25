@@ -1,17 +1,10 @@
 package lania.edu.mx.popularmovies.asynctasks;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -19,9 +12,9 @@ import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
+import lania.edu.mx.popularmovies.net.resources.MoviesResource;
 import lania.edu.mx.popularmovies.tos.MovieConverter;
 import lania.edu.mx.popularmovies.tos.MovieResponse;
-import lania.edu.mx.popularmovies.utils.JsonSerializacionHelper;
 
 /**
  * Created by clemente on 7/22/15.
@@ -60,61 +53,15 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
     }
 
     private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        String jsonMovies = "";
-        ArrayList<Movie> result = new ArrayList<>();
         try {
-            Uri uri = Uri.parse(BASE_URI_TO_DISCOVER_MOVIES).buildUpon()
-                    .appendQueryParameter(SORT_BY_PARAMETER, sortOption.getOrder())
-                    .appendQueryParameter(API_KEY_PARAMETER, getKey()).build();
-
-            Log.d(TAG, uri.toString());
-            URL url = new URL(uri.toString());
-
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-
-            InputStream inputStream = connection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null)
-                return null;
-
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = reader.readLine();
-
-            while (line != null) {
-                buffer.append(line);
-                buffer.append("\n");
-                line = reader.readLine();
-            }
-
-            if (buffer.length() == 0)
-                return null;
-
-            jsonMovies = buffer.toString();
-            MovieResponse response = JsonSerializacionHelper.deserializeObject(MovieResponse.class, jsonMovies);
-            result = MovieConverter.toModel(response);
-
+            MoviesResource resource = PopularMoviesApplication.getObjectGraph().providesMoviesResource();
+            MovieResponse response = resource.getMovies(sortOption.getOrder(), getKey());
+            ArrayList<Movie> result = MovieConverter.toModel(response);
+            return DataResult.createDataResult(result);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             return DataResult.createExceptionResult(e);
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-            }
         }
-
-        return DataResult.createDataResult(result);
     }
 
     @NonNull
