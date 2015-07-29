@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.activities.MovieDetailActivity;
-import lania.edu.mx.popularmovies.adapters.MovieListAdapter;
+import lania.edu.mx.popularmovies.adapters.MovieListGridAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
@@ -63,17 +64,20 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_movie_list, container, false);
+        return inflater.inflate(R.layout.fragment_movie_list_grid, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getMoviesListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieListAdapter adapter = (MovieListAdapter) parent.getAdapter();
+                MovieListGridAdapter adapter = (MovieListGridAdapter) parent.getAdapter();
                 Movie movie = (Movie) adapter.getItem(position);
                 Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
                 intent.putExtra(MOVIE_DATA_EXTRA, movie);
@@ -132,9 +136,11 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     }
 
     private void displayMovies() {
-        MovieListAdapter adapter = new MovieListAdapter(getActivity(), movies);
+
         if (getActivity() != null) {
-            getMoviesListView().setAdapter(adapter);
+            MovieListGridAdapter adapter = new MovieListGridAdapter(getActivity(), movies);
+            GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+            gridview.setAdapter(adapter);
         }
     }
 
