@@ -1,10 +1,15 @@
 package lania.edu.mx.popularmovies.fragments;
 
+import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +18,32 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
+import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.activities.MovieDetailActivity;
 import lania.edu.mx.popularmovies.adapters.MovieListGridAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
+import lania.edu.mx.popularmovies.data.PopularMoviesContract;
+import lania.edu.mx.popularmovies.data.PopularMoviesProvider;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
 import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
+import static lania.edu.mx.popularmovies.models.SortOption.*;
+import static lania.edu.mx.popularmovies.data.PopularMoviesContract.MovieEntry;
+
 /**
  * Fragment to load the movies.
- * Created by clemente on 7/22/15.
+ * Created by Clemente on 7/22/15.
  */
-public class MovieListFragment extends Fragment implements FetchMoviesTask.MovieListener {
+public class MovieListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     /**
      * Data to pass to de detail of the movie.
      */
@@ -50,6 +64,28 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      */
     public static final String PROGRESS_DIALOG_TAG = "LoadingData";
 
+    private static final int MOVIES_LOADER = 23;
+
+    private static final String[] MOVIE_COLUMNS = {
+            MovieEntry.ID,
+            MovieEntry.COLUMN_BACKDROP_IMAGE,
+            MovieEntry.COLUMN_POPULARITY,
+            MovieEntry.COLUMN_POSTER_IMAGE,
+            MovieEntry.COLUMN_RELEASE_DATE,
+            MovieEntry.COLUMN_SYNOPSIS,
+            MovieEntry.COLUMN_TITLE,
+            MovieEntry.COLUMN_VOTE_AVERAGE
+    };
+
+    public static int COLUMN_ID_INDEX = 0;
+    public static int COLUMN_BACKDROG_IMAGE_INDEX = 1;
+    public static int COLUMN_POPULARITY_INDEX = 2;
+    public static int COLUMN_POSTER_IMAGE_INDEX = 3;
+    public static int COLUMN_RELEASE_DATE_INDEX = 4;
+    public static int COLUMN_SYNOPSIS_INDEX = 5;
+    public static int COLUMN_TITLE_INDEX = 6;
+    public static int COLUMN_VOTE_AVERAGE_INDEX = 7;
+
     /**
      * List of movies, currently displayed.
      */
@@ -63,8 +99,9 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_movie_list_grid, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_list_grid, container, false);
+        displayMovies();
+        return view;
     }
 
     @Override
@@ -72,16 +109,15 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         super.onActivityCreated(savedInstanceState);
 
         GridView gridview = (GridView) getView().findViewById(R.id.gridview);
-
+        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MovieListGridAdapter adapter = (MovieListGridAdapter) parent.getAdapter();
                 Movie movie = (Movie) adapter.getItem(position);
-                Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-                intent.putExtra(MOVIE_DATA_EXTRA, movie);
-                getActivity().startActivity(intent);
+
+                ((PopularMoviesApplication) getActivity().getApplicationContext()).getEventBus().post(movie);
             }
         });
 
@@ -96,10 +132,10 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     private void restoreMovieState(Bundle savedInstanceState) {
         if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
             sortOption = getSortOrderFromPreferences();
-            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+            // new FetchMoviesTask(getActivity(), this).execute(sortOption);
         } else {
             int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
-            sortOption = SortOption.valueOf(selectedSortOption);
+            sortOption = valueOf(selectedSortOption);
             movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
             if (movies!=null) {
                 displayMovies();
@@ -113,7 +149,8 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         // if the user is returning from the settings,  we check if the selection order was change to launch the query again.
         if (sortOption != getSortOrderFromPreferences()) {
             sortOption = getSortOrderFromPreferences();
-            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+            // new FetchMoviesTask(getActivity(), this).execute(sortOption);
+            getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
         }
     }
 
@@ -124,7 +161,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         outState.putInt(SELECTED_SORT_OPTION_KEY, sortOption.getId());
     }
 
-    @Override
+
     public void update(DataResult<ArrayList<Movie>, Exception> moviesResult) {
         UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
         if (!moviesResult.isException()) {
@@ -144,7 +181,6 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         }
     }
 
-    @Override
     public void onPreExecute() {
         UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
     }
@@ -164,7 +200,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
 
         int orderId = Integer.parseInt(preferences.getString(key, defaultValue));
 
-        return SortOption.valueOf(orderId);
+        return valueOf(orderId);
     }
 
     /**
@@ -183,5 +219,36 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      */
     private ListView getMoviesListView() {
         return (ListView) getActivity().findViewById(R.id.moviesListView);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String sortOrder = StringUtils.EMPTY;
+
+        switch (sortOption) {
+            case POPULARITY:
+                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_POPULARITY+" desc";
+                break;
+            case RAITING:
+                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE+" desc";
+                break;
+            default:
+                throw new UnsupportedOperationException("Sor ordern not define");
+        }
+
+        Uri orderMovieListUri = PopularMoviesContract.MovieEntry.CONTENT_URI;
+
+        return new CursorLoader(getActivity(), orderMovieListUri, MOVIE_COLUMNS, null, null, sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

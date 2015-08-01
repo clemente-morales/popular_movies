@@ -2,6 +2,9 @@ package lania.edu.mx.popularmovies;
 
 import android.app.Application;
 
+import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
+
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -12,11 +15,14 @@ import javax.inject.Inject;
 public class PopularMoviesApplication extends Application {
     private static PopularMoviesApplication context;
     private static ApplicationComponents component;
+    private Bus eventBus;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
+        eventBus = new Bus(ThreadEnforcer.ANY);
     }
 
     public static ApplicationComponents getObjectGraph() {
@@ -27,5 +33,9 @@ public class PopularMoviesApplication extends Application {
                                     new DependencyModuleApplication(context)).build();
         }
         return component;
+    }
+
+    public Bus getEventBus() {
+        return eventBus;
     }
 }

@@ -7,13 +7,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import lania.edu.mx.popularmovies.R;
+import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
+    private boolean twoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (findViewById(R.id.movie_detail_container)!=null) {
+            twoPane = true;
+
+            if (savedInstanceState==null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
+                        new MovieDetailActivityFragment(), DETAIL_FRAGMENT_TAG).commit();
+            }
+        }
     }
 
     @Override
