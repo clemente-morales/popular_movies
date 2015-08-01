@@ -178,7 +178,7 @@ public class PopularMoviesProvider extends ContentProvider {
      *
      * @return UriMatcher to select the query to execute.
      */
-    private static UriMatcher buildUriMatcher() {
+    public static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(PopularMoviesContract.CONTENT_AUTHORITY, PopularMoviesContract.MOVIE_PATH, MOVIE);
         return matcher;

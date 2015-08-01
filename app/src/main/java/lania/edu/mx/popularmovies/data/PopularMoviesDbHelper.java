@@ -17,7 +17,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
     /**
      * Name of the database.
      */
-    private static final String DATABASE_NAME = "popular_movies.db";
+    public static final String DATABASE_NAME = "popular_movies.db";
 
     /**
      * Allows to create an instance of this helper to manage the creation of the database for popular
@@ -31,7 +31,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE" + PopularMoviesContract.MovieEntry.TABLE_NAME + " (" +
+        final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + PopularMoviesContract.MovieEntry.TABLE_NAME + " (" +
                 PopularMoviesContract.MovieEntry.ID + " INTEGER PRIMARY KEY," +
                 PopularMoviesContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_SYNOPSIS + " TEXT NOT NULL," +
