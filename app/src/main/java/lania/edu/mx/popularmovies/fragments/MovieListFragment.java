@@ -3,7 +3,6 @@ package lania.edu.mx.popularmovies.fragments;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,45 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
 
 import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
-import lania.edu.mx.popularmovies.activities.MovieDetailActivity;
-import lania.edu.mx.popularmovies.adapters.MovieListGridAdapter;
+import lania.edu.mx.popularmovies.adapters.MovieListCursorAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
 import lania.edu.mx.popularmovies.data.PopularMoviesContract;
-import lania.edu.mx.popularmovies.data.PopularMoviesProvider;
-import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
-import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
 import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
-import static lania.edu.mx.popularmovies.models.SortOption.*;
 import static lania.edu.mx.popularmovies.data.PopularMoviesContract.MovieEntry;
+import static lania.edu.mx.popularmovies.models.SortOption.valueOf;
 
 /**
  * Fragment to load the movies.
  * Created by Clemente on 7/22/15.
  */
-public class MovieListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    /**
-     * Data to pass to de detail of the movie.
-     */
-    public static final String MOVIE_DATA_EXTRA = "MovieData";
-
-    /**
-     * Key to restore the movies.
-     */
-    public static final String LIST_OF_MOVIES_KEY = "ListOfMovies";
-
+public class MovieListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     /**
      * Key to restore de selected sort option.
      */
@@ -86,10 +66,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     public static int COLUMN_TITLE_INDEX = 6;
     public static int COLUMN_VOTE_AVERAGE_INDEX = 7;
 
-    /**
-     * List of movies, currently displayed.
-     */
-    private ArrayList<Movie> movies;
+    private MovieListCursorAdapter movieListCursorAdapter;
 
     /**
      * Selected sort option.
@@ -100,27 +77,31 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_list_grid, container, false);
-        displayMovies();
+        movieListCursorAdapter = new MovieListCursorAdapter(getActivity(),null, 0);
+        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+        gridview.setAdapter(movieListCursorAdapter);
+        new FetchMoviesTask(getActivity()).execute(getSortOrderFromPreferences());
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+
+                int rowId = cursor.getInt(COLUMN_ID_INDEX);
+
+                PopularMoviesApplication.getPopularMoviesApplication(getActivity().getApplicationContext())
+                        .getEventBus().post(PopularMoviesContract.MovieEntry.buildMovieUri(rowId));
+            }
+        });
+
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieListGridAdapter adapter = (MovieListGridAdapter) parent.getAdapter();
-                Movie movie = (Movie) adapter.getItem(position);
-
-                ((PopularMoviesApplication) getActivity().getApplicationContext()).getEventBus().post(movie);
-            }
-        });
-
         restoreMovieState(savedInstanceState);
     }
 
@@ -130,16 +111,11 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
      * @param savedInstanceState Previous state of the fragment..
      */
     private void restoreMovieState(Bundle savedInstanceState) {
-        if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
+        if (savedInstanceState == null) {
             sortOption = getSortOrderFromPreferences();
-            // new FetchMoviesTask(getActivity(), this).execute(sortOption);
         } else {
             int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
             sortOption = valueOf(selectedSortOption);
-            movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
-            if (movies!=null) {
-                displayMovies();
-            }
         }
     }
 
@@ -149,7 +125,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
         // if the user is returning from the settings,  we check if the selection order was change to launch the query again.
         if (sortOption != getSortOrderFromPreferences()) {
             sortOption = getSortOrderFromPreferences();
-            // new FetchMoviesTask(getActivity(), this).execute(sortOption);
+            new FetchMoviesTask(getActivity()).execute(sortOption);
             getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
         }
     }
@@ -157,32 +133,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(LIST_OF_MOVIES_KEY, movies);
         outState.putInt(SELECTED_SORT_OPTION_KEY, sortOption.getId());
-    }
-
-
-    public void update(DataResult<ArrayList<Movie>, Exception> moviesResult) {
-        UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
-        if (!moviesResult.isException()) {
-            this.movies = moviesResult.getData();
-            displayMovies();
-        } else {
-            Toast.makeText(getActivity(),R.string.error_connection_message, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void displayMovies() {
-
-        if (getActivity() != null) {
-            MovieListGridAdapter adapter = new MovieListGridAdapter(getActivity(), movies);
-            GridView gridview = (GridView) getView().findViewById(R.id.gridview);
-            gridview.setAdapter(adapter);
-        }
-    }
-
-    public void onPreExecute() {
-        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
     }
 
     /**
@@ -212,26 +163,18 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
         return new DialogData(R.string.app_name, R.string.message_progress_bar, false, android.R.drawable.ic_dialog_alert);
     }
 
-    /**
-     * Returns the ListView control to display the movies.
-     *
-     * @return ListView control to display the movies.
-     */
-    private ListView getMoviesListView() {
-        return (ListView) getActivity().findViewById(R.id.moviesListView);
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String sortOrder = StringUtils.EMPTY;
+        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
 
         switch (sortOption) {
             case POPULARITY:
-                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_POPULARITY+" desc";
+                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_POPULARITY + " desc";
                 break;
             case RAITING:
-                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE+" desc";
+                sortOrder = PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE + " desc";
                 break;
             default:
                 throw new UnsupportedOperationException("Sor ordern not define");
@@ -244,11 +187,12 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        movieListCursorAdapter.swapCursor(data);
+        UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        movieListCursorAdapter.swapCursor(null);
     }
 }

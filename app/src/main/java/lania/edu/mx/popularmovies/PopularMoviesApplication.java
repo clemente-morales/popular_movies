@@ -1,6 +1,7 @@
 package lania.edu.mx.popularmovies;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
@@ -37,5 +38,9 @@ public class PopularMoviesApplication extends Application {
 
     public Bus getEventBus() {
         return eventBus;
+    }
+
+    public static PopularMoviesApplication getPopularMoviesApplication(Context context) {
+        return (PopularMoviesApplication) context;
     }
 }
