@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import lania.edu.mx.popularmovies.R;
+import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -13,6 +14,19 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+
+        if (savedInstanceState == null) {
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(MovieDetailActivityFragment.DETAIL_URI_KEY, getIntent().getData());
+
+            MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
+            fragment.setArguments(arguments);
+
+
+            getFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment)
+                    .commit();
+        }
+
     }
 
 

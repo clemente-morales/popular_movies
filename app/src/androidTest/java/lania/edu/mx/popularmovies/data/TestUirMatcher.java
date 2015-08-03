@@ -9,10 +9,13 @@ import android.test.AndroidTestCase;
  */
 public class TestUirMatcher extends AndroidTestCase {
     private static final Uri TEST_WEATHER_DIR = PopularMoviesContract.MovieEntry.CONTENT_URI;
+    public static final int ROW_ID = 23;
 
     public void testUriMatcher() {
         UriMatcher testMatcher = PopularMoviesProvider.buildUriMatcher();
         assertEquals("Error: The MOVIE URI was matched incorrectly.",
                 testMatcher.match(TEST_WEATHER_DIR), PopularMoviesProvider.MOVIE);
+        assertEquals("Error: The MOVIE_BY_ID URI was matched incorrectly.",
+                testMatcher.match(PopularMoviesContract.MovieEntry.buildMovieUri(ROW_ID)),PopularMoviesProvider.MOVIE_BY_ID );
     }
 }

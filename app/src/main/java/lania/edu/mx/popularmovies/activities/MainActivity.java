@@ -1,12 +1,17 @@
 package lania.edu.mx.popularmovies.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.squareup.otto.Subscribe;
+
+import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
+import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,14 +24,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (findViewById(R.id.movie_detail_container)!=null) {
+        if (findViewById(R.id.movie_detail_container) != null) {
             twoPane = true;
 
-            if (savedInstanceState==null) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
+            if (savedInstanceState == null) {
+                getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
                         new MovieDetailActivityFragment(), DETAIL_FRAGMENT_TAG).commit();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().unregister(this);
+        super.onPause();
     }
 
     @Override
@@ -51,5 +68,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    public void onItemSelected(Uri uri) {
+        if (twoPane) {
+            PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().post(new MovieSelectionChangeEvent(uri));
+        } else {
+            Intent intent = new Intent(this, MovieDetailActivity.class)
+                    .setData(uri);
+            startActivity(intent);
+        }
     }
 }

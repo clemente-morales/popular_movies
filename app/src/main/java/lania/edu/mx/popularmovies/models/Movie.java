@@ -53,12 +53,6 @@ public class Movie implements Parcelable {
      */
     private final String backDropImageName;
 
-
-    /**
-     * Language of the movie.
-     */
-    private final String language;
-
     /**
      * Identifier of the movie.
      */
@@ -79,10 +73,9 @@ public class Movie implements Parcelable {
      * @param popularity        Rainting of the movie.
      * @param releaseDate       Release date of the movie.
      * @param backDropImageName Movie backdrop image name.
-     * @param language          Original language of the movie.
      * @param voteAverage       Vote average for the movie.
      */
-    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, String language, float voteAverage) {
+    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, float voteAverage) {
         this.id = id;
         this.title = title;
         this.posterImageName = posterImageName;
@@ -90,7 +83,6 @@ public class Movie implements Parcelable {
         this.popularity = popularity;
         this.releaseDate = releaseDate;
         this.backDropImageName = backDropImageName;
-        this.language = language;
         this.voteAverage = voteAverage;
     }
 
@@ -107,7 +99,6 @@ public class Movie implements Parcelable {
         this.popularity = source.readFloat();
         this.releaseDate = (Date) source.readSerializable();
         this.backDropImageName = source.readString();
-        this.language = source.readString();
         this.voteAverage = source.readFloat();
     }
 
@@ -183,15 +174,6 @@ public class Movie implements Parcelable {
         return backDropImageName;
     }
 
-    /**
-     * Allows to get the Language of the movie.
-     *
-     * @return Language of the movie.
-     */
-    public String getLanguage() {
-        return language;
-    }
-
     @Override
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
@@ -211,7 +193,6 @@ public class Movie implements Parcelable {
         dest.writeFloat(popularity);
         dest.writeSerializable(releaseDate);
         dest.writeString(backDropImageName);
-        dest.writeString(language);
         dest.writeFloat(voteAverage);
     }
 

@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.google.common.eventbus.Subscribe;
+import com.squareup.otto.Subscribe;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,23 +52,11 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
 
     private static final String[] MOVIE_COLUMNS = {
             MovieEntry.ID,
-            MovieEntry.COLUMN_BACKDROP_IMAGE,
-            MovieEntry.COLUMN_POPULARITY,
-            MovieEntry.COLUMN_POSTER_IMAGE,
-            MovieEntry.COLUMN_RELEASE_DATE,
-            MovieEntry.COLUMN_SYNOPSIS,
-            MovieEntry.COLUMN_TITLE,
-            MovieEntry.COLUMN_VOTE_AVERAGE
+            MovieEntry.COLUMN_POSTER_IMAGE
     };
 
     public static int COLUMN_ID_INDEX = 0;
-    public static int COLUMN_BACKDROG_IMAGE_INDEX = 1;
-    public static int COLUMN_POPULARITY_INDEX = 2;
-    public static int COLUMN_POSTER_IMAGE_INDEX = 3;
-    public static int COLUMN_RELEASE_DATE_INDEX = 4;
-    public static int COLUMN_SYNOPSIS_INDEX = 5;
-    public static int COLUMN_TITLE_INDEX = 6;
-    public static int COLUMN_VOTE_AVERAGE_INDEX = 7;
+    public static int COLUMN_POSTER_IMAGE_INDEX = 1;
 
     private MovieListCursorAdapter movieListCursorAdapter;
 

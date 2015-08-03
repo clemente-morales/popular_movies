@@ -18,9 +18,14 @@ public class PopularMoviesProvider extends ContentProvider {
     public static final int MOVIE = 100;
 
     /**
+     * Id to request the Movies by Id.
+     */
+    public static final int MOVIE_BY_ID = 101;
+
+    /**
      * Id to request the Movies sorted by a criteria.
      */
-    public static final int SORTED_MOVIE = 101;
+    public static final int SORTED_MOVIE = 102;
 
     /**
      * Manages the data base.
@@ -45,6 +50,7 @@ public class PopularMoviesProvider extends ContentProvider {
         final int match = buildUriMatcher().match(uri);
         switch (match) {
             case MOVIE:
+            case MOVIE_BY_ID:
                 result = dbHelper.getReadableDatabase().query(PopularMoviesContract.MovieEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
@@ -60,6 +66,8 @@ public class PopularMoviesProvider extends ContentProvider {
             case MOVIE:
             case SORTED_MOVIE:
                 return PopularMoviesContract.MovieEntry.CONTENT_TYPE;
+            case MOVIE_BY_ID:
+                return PopularMoviesContract.MovieEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -181,6 +189,7 @@ public class PopularMoviesProvider extends ContentProvider {
     public static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(PopularMoviesContract.CONTENT_AUTHORITY, PopularMoviesContract.MOVIE_PATH, MOVIE);
+        matcher.addURI(PopularMoviesContract.CONTENT_AUTHORITY, PopularMoviesContract.MOVIE_PATH + "/*", MOVIE_BY_ID);
         return matcher;
     }
 }
