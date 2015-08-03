@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -64,6 +65,11 @@ public class Movie implements Parcelable {
     private final int id;
 
     /**
+     * vote average for the movie.
+     */
+    private float voteAverage;
+
+    /**
      * Allows to construct an instance of this class to encapsulate the movie with its data.
      *
      * @param id                Id of the movie.
@@ -74,8 +80,9 @@ public class Movie implements Parcelable {
      * @param releaseDate       Release date of the movie.
      * @param backDropImageName Movie backdrop image name.
      * @param language          Original language of the movie.
+     * @param voteAverage       Vote average for the movie.
      */
-    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, String language) {
+    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, String language, float voteAverage) {
         this.id = id;
         this.title = title;
         this.posterImageName = posterImageName;
@@ -84,6 +91,7 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
         this.backDropImageName = backDropImageName;
         this.language = language;
+        this.voteAverage = voteAverage;
     }
 
     /**
@@ -100,6 +108,7 @@ public class Movie implements Parcelable {
         this.releaseDate = (Date) source.readSerializable();
         this.backDropImageName = source.readString();
         this.language = source.readString();
+        this.voteAverage = source.readFloat();
     }
 
     /**
@@ -153,7 +162,7 @@ public class Movie implements Parcelable {
      * @return User raiting.
      */
     public float getPopularity() {
-        return (popularity / MAX_POPULARITY) * MAX_STARTS;
+        return (voteAverage / MAX_POPULARITY) * MAX_STARTS;
     }
 
     /**
@@ -203,5 +212,28 @@ public class Movie implements Parcelable {
         dest.writeSerializable(releaseDate);
         dest.writeString(backDropImageName);
         dest.writeString(language);
+        dest.writeFloat(voteAverage);
+    }
+
+    /**
+     * Allows to get the movie id.
+     *
+     * @return Id of the movie.
+     */
+    public int getId() {
+        return id;
+    }
+
+    public String getFormatReleaseDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(releaseDate);
+    }
+
+    /**
+     * Allows to get the vote average for the movie.
+     * @return vote average for the movie.
+     */
+    public float getVoteAverage() {
+        return voteAverage;
     }
 }

@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
+
+import com.google.common.eventbus.Subscribe;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,6 +25,7 @@ import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.adapters.MovieListCursorAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
 import lania.edu.mx.popularmovies.data.PopularMoviesContract;
+import lania.edu.mx.popularmovies.events.otto.FinishingFetchingMoviesEvent;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.SortOption;
 import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
@@ -194,5 +198,12 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         movieListCursorAdapter.swapCursor(null);
+    }
+
+    @Subscribe
+    public void onFinishingFetchingMovies(FinishingFetchingMoviesEvent event) {
+        if (event.getResult().isException()) {
+            Toast.makeText(getActivity(), R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+        }
     }
 }

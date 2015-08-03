@@ -36,6 +36,9 @@ public class Movie {
     private String posterImage;
 
     @JsonProperty("vote_average")
+    private float voteAverage;
+
+    @JsonProperty("popularity")
     private float populariy;
 
     @JsonProperty("original_language")
@@ -122,6 +125,14 @@ public class Movie {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(float voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     @Override
