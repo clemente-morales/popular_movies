@@ -17,6 +17,7 @@ import dagger.Module;
 import dagger.Provides;
 import lania.edu.mx.popularmovies.net.exceptions.GeneralErrorHandler;
 import lania.edu.mx.popularmovies.net.resources.MoviesResource;
+import lania.edu.mx.popularmovies.utils.LogExtensor;
 import retrofit.RestAdapter;
 import retrofit.converter.JacksonConverter;
 
@@ -86,7 +87,7 @@ public class DependencyModuleApplication {
                 .setLog(new RestAdapter.Log() {
                     @Override
                     public void log(String msg) {
-                        Log.d(TAG, msg);
+                        LogExtensor.imprimeLog(msg);
                     }
                 })
                 .setErrorHandler(new GeneralErrorHandler(this.context))

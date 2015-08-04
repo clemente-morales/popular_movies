@@ -16,7 +16,7 @@ import javax.inject.Inject;
 public class PopularMoviesApplication extends Application {
     private static PopularMoviesApplication context;
     private static ApplicationComponents component;
-    private Bus eventBus;
+    private static Bus eventBus;
 
 
     @Override
@@ -36,11 +36,7 @@ public class PopularMoviesApplication extends Application {
         return component;
     }
 
-    public Bus getEventBus() {
+    public static Bus getEventBus() {
         return eventBus;
-    }
-
-    public static PopularMoviesApplication getPopularMoviesApplication(Context context) {
-        return (PopularMoviesApplication) context;
     }
 }

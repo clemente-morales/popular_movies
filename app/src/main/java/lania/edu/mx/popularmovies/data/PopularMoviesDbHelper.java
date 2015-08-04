@@ -12,7 +12,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
     /**
      * Scheme version of the data base.
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     /**
      * Name of the database.
@@ -34,12 +34,12 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + PopularMoviesContract.MovieEntry.TABLE_NAME + " (" +
                 PopularMoviesContract.MovieEntry.ID + " INTEGER PRIMARY KEY," +
                 PopularMoviesContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
-                PopularMoviesContract.MovieEntry.COLUMN_SYNOPSIS + " TEXT NOT NULL," +
+                PopularMoviesContract.MovieEntry.COLUMN_SYNOPSIS + " TEXT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_POPULARITY + " REAL NOT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE + " REAL NOT NULL," +
-                PopularMoviesContract.MovieEntry.COLUMN_POSTER_IMAGE + " TEXT NOT NULL," +
-                PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE + " TEXT NOT NULL);";
+                PopularMoviesContract.MovieEntry.COLUMN_POSTER_IMAGE + " TEXT NULL," +
+                PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE + " TEXT NULL);";
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
     }

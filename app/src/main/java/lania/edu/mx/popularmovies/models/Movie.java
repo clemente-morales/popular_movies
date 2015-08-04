@@ -3,6 +3,7 @@ package lania.edu.mx.popularmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.text.SimpleDateFormat;
@@ -207,7 +208,7 @@ public class Movie implements Parcelable {
 
     public String getFormatReleaseDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(releaseDate);
+        return null == releaseDate ? StringUtils.EMPTY : simpleDateFormat.format(releaseDate);
     }
 
     /**

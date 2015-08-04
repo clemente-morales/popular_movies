@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.data.PopularMoviesContract;
+import lania.edu.mx.popularmovies.events.otto.FinishingFetchingMoviesEvent;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
@@ -48,20 +49,24 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
 
     private void insertDataInDb(ArrayList<Movie> movies) {
         List<ContentValues> data = new ArrayList<>();
+
         String[] projection = new String[]{PopularMoviesContract.MovieEntry.ID};
         String selection = PopularMoviesContract.MovieEntry.ID + "=?";
         String[] selectionArgs = new String[1];
         String order = null;
-
         for (Movie movie : movies) {
             selectionArgs[0] = "" + movie.getId();
-            Cursor movieCursor = context.getContentResolver().query(PopularMoviesContract.MovieEntry.CONTENT_URI, projection, selection, selectionArgs, order);
+            Cursor movieCursor = context.getContentResolver().query(PopularMoviesContract.MovieEntry.CONTENT_URI,
+                    projection, selection, selectionArgs, order);
             if (!movieCursor.moveToFirst()) {
                 data.add(MovieConverter.toContentValues(movie));
             }
+            movieCursor.close();
         }
 
-        context.getContentResolver().bulkInsert(PopularMoviesContract.MovieEntry.CONTENT_URI, (ContentValues[]) data.toArray());
+        ContentValues[] dataToInsert = new ContentValues[data.size()];
+        data.toArray(dataToInsert);
+        context.getContentResolver().bulkInsert(PopularMoviesContract.MovieEntry.CONTENT_URI, dataToInsert);
     }
 
     private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
@@ -84,6 +89,6 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
 
     @Override
     protected void onPostExecute(DataResult<ArrayList<Movie>, Exception> result) {
-        PopularMoviesApplication.getPopularMoviesApplication(context).getEventBus().post(result);
+        PopularMoviesApplication.getEventBus().post(new FinishingFetchingMoviesEvent(result));
     }
 }

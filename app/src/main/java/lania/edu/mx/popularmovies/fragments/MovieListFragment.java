@@ -28,7 +28,6 @@ import lania.edu.mx.popularmovies.data.PopularMoviesContract;
 import lania.edu.mx.popularmovies.events.otto.FinishingFetchingMoviesEvent;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.SortOption;
-import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
 import static lania.edu.mx.popularmovies.data.PopularMoviesContract.MovieEntry;
 import static lania.edu.mx.popularmovies.models.SortOption.valueOf;
@@ -70,7 +69,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_list_grid, container, false);
         movieListCursorAdapter = new MovieListCursorAdapter(getActivity(),null, 0);
-        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+        GridView gridview = (GridView) view.findViewById(R.id.gridview);
         gridview.setAdapter(movieListCursorAdapter);
         new FetchMoviesTask(getActivity()).execute(getSortOrderFromPreferences());
 
@@ -82,8 +81,7 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
 
                 int rowId = cursor.getInt(COLUMN_ID_INDEX);
 
-                PopularMoviesApplication.getPopularMoviesApplication(getActivity().getApplicationContext())
-                        .getEventBus().post(PopularMoviesContract.MovieEntry.buildMovieUri(rowId));
+                PopularMoviesApplication.getEventBus().post(PopularMoviesContract.MovieEntry.buildMovieUri(rowId));
             }
         });
 
@@ -93,8 +91,21 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        sortOption = getSortOrderFromPreferences();
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
         restoreMovieState(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        PopularMoviesApplication.getEventBus().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        PopularMoviesApplication.getEventBus().unregister(this);
     }
 
     /**
@@ -159,7 +170,6 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         String sortOrder = StringUtils.EMPTY;
-        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
 
         switch (sortOption) {
             case POPULARITY:
@@ -180,7 +190,6 @@ public class MovieListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         movieListCursorAdapter.swapCursor(data);
-        UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
     }
 
     @Override

@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().register(this);
+        PopularMoviesApplication.getEventBus().register(this);
     }
 
     @Override
     protected void onPause() {
-        PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().unregister(this);
+        PopularMoviesApplication.getEventBus().unregister(this);
         super.onPause();
     }
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void onItemSelected(Uri uri) {
         if (twoPane) {
-            PopularMoviesApplication.getPopularMoviesApplication(this).getEventBus().post(new MovieSelectionChangeEvent(uri));
+            PopularMoviesApplication.getEventBus().post(new MovieSelectionChangeEvent(uri));
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class)
                     .setData(uri);
