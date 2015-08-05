@@ -3,7 +3,7 @@ package lania.edu.mx.popularmovies.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,7 +14,7 @@ import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
 
     private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
     private boolean twoPane;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             twoPane = true;
 
             if (savedInstanceState == null) {
-                getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
                         new MovieDetailActivityFragment(), DETAIL_FRAGMENT_TAG).commit();
             }
         }

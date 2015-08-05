@@ -1,6 +1,6 @@
 package lania.edu.mx.popularmovies.utils;
 
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 
 import lania.edu.mx.popularmovies.fragments.IndeterminateProgressDialog;
 import lania.edu.mx.popularmovies.models.DialogData;
@@ -17,20 +17,21 @@ public class UserInterfaceHelper {
      * @param dialogData Data for the dialog.
      * @param dialogId Id of the dialog.
      */
-    public static void displayProgressDialog(final Activity activity,
+    public static void displayProgressDialog(final ActionBarActivity activity,
                                              final DialogData dialogData, final String dialogId) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 IndeterminateProgressDialog indeterminateProgressDialog
-                        = (IndeterminateProgressDialog) activity
-                        .getFragmentManager().findFragmentByTag(dialogId);
+                        = (IndeterminateProgressDialog) activity.getSupportFragmentManager()
+                        .findFragmentByTag(dialogId);
                 if (indeterminateProgressDialog == null) {
                     indeterminateProgressDialog = indeterminateProgressDialog
                             .newInstance(dialogData);
                     indeterminateProgressDialog.show(
-                            activity.getFragmentManager(), dialogId);
-                    activity.getFragmentManager().executePendingTransactions();
+                            activity.getSupportFragmentManager()
+                            , dialogId);
+                    activity.getSupportFragmentManager().executePendingTransactions();
                 }
             }
         });
@@ -42,17 +43,17 @@ public class UserInterfaceHelper {
      * @param activity Actiivity where the dialog is running.
      * @param dialogId Id of the dialog to remove.
      */
-    public static void deleteProgressDialog(final Activity activity,
+    public static void deleteProgressDialog(final ActionBarActivity activity,
                                             final String dialogId) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 IndeterminateProgressDialog indeterminateProgressDialog
                         = (IndeterminateProgressDialog) activity
-                        .getFragmentManager().findFragmentByTag(dialogId);
+                        .getSupportFragmentManager().findFragmentByTag(dialogId);
                 if (indeterminateProgressDialog != null) {
                     indeterminateProgressDialog.dismiss();
-                    activity.getFragmentManager().executePendingTransactions();
+                    activity.getSupportFragmentManager().executePendingTransactions();
                 }
             }
         });

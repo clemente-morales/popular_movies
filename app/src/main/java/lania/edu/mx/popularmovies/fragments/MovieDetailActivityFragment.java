@@ -1,12 +1,14 @@
 package lania.edu.mx.popularmovies.fragments;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
+import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.data.PopularMoviesContract;
 import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
@@ -45,9 +48,12 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
             PopularMoviesContract.MovieEntry.COLUMN_TITLE,
             PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE
     };
+    private ImageView thumbailImage;
+    private TextView title;
+    private TextView synopsis;
+    private TextView release;
+    private RatingBar raitingBar;
 
-    public MovieDetailActivityFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,12 +63,21 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
         if (arguments != null) {
             mUri = arguments.getParcelable(DETAIL_URI_KEY);
         }
+        Log.d(TAG, "Uri " + mUri);
+        View view = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false);
+        thumbailImage = (ImageView) view.findViewById(R.id.movieThumbailImageView);
+        title = (TextView) view.findViewById(R.id.movieTitleTextView);
+        synopsis = (TextView) view.findViewById(R.id.movieSynopsisTextView);
+        release = (TextView) view.findViewById(R.id.movieReleaseDateTextView);
+        raitingBar = (RatingBar) view.findViewById(R.id.movieRatingBar);
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated ");
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -70,10 +85,12 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
     @Override
     public void onResume() {
         super.onResume();
+        PopularMoviesApplication.getEventBus().register(this);
     }
 
     @Override
     public void onStop() {
+        PopularMoviesApplication.getEventBus().unregister(this);
         super.onStop();
     }
 
@@ -87,19 +104,10 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
      * Allows to dipslay the detail of a movie.
      */
     private void displayData(Movie movie) {
-        ImageView thumbailImage = (ImageView) getActivity().findViewById(R.id.movieThumbailImageView);
         displayImage(movie.getPosterImageName(), thumbailImage);
-
-        TextView title = (TextView) getActivity().findViewById(R.id.movieTitleTextView);
         title.setText(movie.getTitle());
-
-        TextView synopsis = (TextView) getActivity().findViewById(R.id.movieSynopsisTextView);
         synopsis.setText(movie.getSynopsis());
-
-        TextView release = (TextView) getActivity().findViewById(R.id.movieReleaseDateTextView);
         release.setText(formatDate(movie.getReleaseDate()));
-
-        RatingBar raitingBar = (RatingBar) getActivity().findViewById(R.id.movieRatingBar);
         raitingBar.setRating(movie.getPopularity());
     }
 
@@ -111,7 +119,7 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
      */
     private String formatDate(Date releaseDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(releaseDate);
+        return null != releaseDate ? simpleDateFormat.format(releaseDate) : null;
     }
 
     /**
@@ -127,20 +135,26 @@ public class MovieDetailActivityFragment extends Fragment implements LoaderManag
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (null != mUri) {
-            return new CursorLoader(getActivity(), mUri, MOVIE_COLUMNS, null, null, null);
+            String selection = PopularMoviesContract.MovieEntry.ID + "=?";
+            String[] selectionArgs = new String[1];
+            selectionArgs[0] = "" + ContentUris.parseId(mUri);
+            return new CursorLoader(getActivity(), mUri, MOVIE_COLUMNS, selection, selectionArgs, null);
         }
 
         return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (null!= data&& data.moveToFirst()) {
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        if (null != data && data.moveToFirst()) {
+            Log.d(TAG, "onLoadFinished model " + MovieConverter.toModel(data));
             displayData(MovieConverter.toModel(data));
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+
     }
+
 }

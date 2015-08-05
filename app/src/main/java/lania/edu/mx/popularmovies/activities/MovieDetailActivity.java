@@ -1,14 +1,16 @@
 package lania.edu.mx.popularmovies.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends ActionBarActivity {
+    private static final String TAG = MovieDetailActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +21,13 @@ public class MovieDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putParcelable(MovieDetailActivityFragment.DETAIL_URI_KEY, getIntent().getData());
 
+            Log.d(TAG, "Uri" + arguments);
+
             MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
             fragment.setArguments(arguments);
 
 
-            getFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment)
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment)
                     .commit();
         }
 
