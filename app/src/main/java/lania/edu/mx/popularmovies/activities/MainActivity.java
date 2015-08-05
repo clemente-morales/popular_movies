@@ -1,9 +1,8 @@
 package lania.edu.mx.popularmovies.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,8 +12,9 @@ import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
+import lania.edu.mx.popularmovies.models.Movie;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
     private boolean twoPane;
@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
             twoPane = true;
 
             if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
+                getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
                         new MovieDetailActivityFragment(), DETAIL_FRAGMENT_TAG).commit();
             }
         }
@@ -71,12 +71,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Subscribe
-    public void onItemSelected(Uri uri) {
+    public void onItemSelected(Movie movie) {
         if (twoPane) {
-            PopularMoviesApplication.getEventBus().post(new MovieSelectionChangeEvent(uri));
+            PopularMoviesApplication.getEventBus().post(new MovieSelectionChangeEvent(movie));
         } else {
-            Intent intent = new Intent(this, MovieDetailActivity.class)
-                    .setData(uri);
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            intent.putExtra(MovieDetailActivityFragment.MOVIE_DETAIL_KEY, movie);
             startActivity(intent);
         }
     }

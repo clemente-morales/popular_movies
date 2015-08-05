@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
+import lania.edu.mx.popularmovies.models.Movie;
 
 public class MovieDetailActivity extends ActionBarActivity {
     private static final String TAG = MovieDetailActivity.class.getSimpleName();
@@ -18,16 +19,17 @@ public class MovieDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_movie_detail);
 
         if (savedInstanceState == null) {
+            Movie movie = getIntent().getParcelableExtra(MovieDetailActivityFragment.MOVIE_DETAIL_KEY);
             Bundle arguments = new Bundle();
-            arguments.putParcelable(MovieDetailActivityFragment.DETAIL_URI_KEY, getIntent().getData());
+            arguments.putParcelable(MovieDetailActivityFragment.MOVIE_DETAIL_KEY, movie);
 
-            Log.d(TAG, "Uri" + arguments);
+            Log.d(TAG, "Movie " + arguments);
 
             MovieDetailActivityFragment fragment = new MovieDetailActivityFragment();
             fragment.setArguments(arguments);
 
 
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment)
+            getFragmentManager().beginTransaction().add(R.id.movie_detail_container, fragment)
                     .commit();
         }
 

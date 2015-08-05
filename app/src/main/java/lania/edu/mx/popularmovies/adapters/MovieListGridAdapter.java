@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
 
-import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.models.Movie;
 
 /**
@@ -80,6 +79,6 @@ public class MovieListGridAdapter extends BaseAdapter {
      * @param imageView Control to display the thumbail image for the movie
      */
     private void displayImage(String imageName, ImageView imageView) {
-        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).placeholder(R.mipmap.not_found_image).into(imageView);
+        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
     }
 }

@@ -1,18 +1,18 @@
 package lania.edu.mx.popularmovies.events.otto;
 
-import android.net.Uri;
+import lania.edu.mx.popularmovies.models.Movie;
 
 /**
  * Created by clemente on 8/3/15.
  */
 public class MovieSelectionChangeEvent {
-    private final Uri movieUri;
+    private final Movie movieUri;
 
-    public MovieSelectionChangeEvent(Uri movieUri) {
+    public MovieSelectionChangeEvent(Movie movieUri) {
         this.movieUri = movieUri;
     }
 
-    public Uri getMovieUri() {
+    public Movie getMovieUri() {
         return movieUri;
     }
 }
