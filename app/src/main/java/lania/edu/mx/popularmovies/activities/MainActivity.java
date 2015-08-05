@@ -16,7 +16,9 @@ import lania.edu.mx.popularmovies.models.Movie;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
+    public static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
+
+    private static final String TAG = MainActivity.class.getSimpleName();
     private boolean twoPane;
 
     @Override

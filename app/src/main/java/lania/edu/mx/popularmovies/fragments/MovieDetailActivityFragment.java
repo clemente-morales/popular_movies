@@ -1,6 +1,7 @@
 package lania.edu.mx.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,10 @@ import lania.edu.mx.popularmovies.models.Movie;
 public class MovieDetailActivityFragment extends Fragment {
 
     public static final String MOVIE_DETAIL_KEY = "MovieDetailKey";
-    private Movie movie;
 
-    public MovieDetailActivityFragment() {
-    }
+    private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
+
+    private Movie movie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,8 +103,7 @@ public class MovieDetailActivityFragment extends Fragment {
      * It extract the data from the Intent.
      */
     private void extractMovieDetailDataFromIntent() {
-        if (getArguments() != null) {
-            movie = getArguments().getParcelable(MOVIE_DETAIL_KEY);
-        }
+        Intent intent = getActivity().getIntent();
+        movie = intent.getParcelableExtra(MOVIE_DETAIL_KEY);
     }
 }
