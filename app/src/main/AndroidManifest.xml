@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".activities.SettingsActivity"
             android:label="@string/action_settings"></activity>
+        <service android:name=".services.MoviesService" android:exported="false"></service>
         <provider
             android:authorities="lania.edu.mx.popularmovies.app"
             android:name=".data.PopularMoviesProvider"></provider>

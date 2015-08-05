@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.Date;
 
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.models.Movie;
+import lania.edu.mx.popularmovies.services.MoviesService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -76,6 +78,16 @@ public class MovieDetailActivityFragment extends Fragment {
 
         RatingBar raitingBar = (RatingBar) getActivity().findViewById(R.id.movieRatingBar);
         raitingBar.setRating(movie.getPopularity());
+
+        Button button = (Button) getActivity().findViewById(R.id.markAsFavoriteButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MoviesService.class);
+                intent.putExtra(MoviesService.MOVIE_DATA_KEY, movie);
+                getActivity().startService(intent);
+            }
+        });
     }
 
     /**

@@ -12,7 +12,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
     /**
      * Scheme version of the data base.
      */
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     /**
      * Name of the database.
