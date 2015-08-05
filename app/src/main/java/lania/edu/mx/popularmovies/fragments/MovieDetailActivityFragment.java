@@ -1,15 +1,20 @@
 package lania.edu.mx.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -17,17 +22,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lania.edu.mx.popularmovies.R;
+import lania.edu.mx.popularmovies.adapters.MovieVideosAdapter;
+import lania.edu.mx.popularmovies.asynctasks.FetchMovieDetailTask;
+import lania.edu.mx.popularmovies.models.DataResult;
+import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
+import lania.edu.mx.popularmovies.models.Video;
 import lania.edu.mx.popularmovies.services.MoviesService;
+import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieDetailActivityFragment extends Fragment {
+public class MovieDetailActivityFragment extends Fragment implements FetchMovieDetailTask.MovieDetailListener {
 
     public static final String MOVIE_DETAIL_KEY = "MovieDetailKey";
 
     private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
+
+    /**
+     * Tag for the progress dialog.
+     */
+    public static final String PROGRESS_DIALOG_TAG = "LoadingData";
 
     private Movie movie;
 
@@ -43,10 +59,31 @@ public class MovieDetailActivityFragment extends Fragment {
         restoreState(savedInstanceState);
         extractMovieDetailDataFromIntent();
         displayData();
+
+        ListView videosListView = (ListView) getView().findViewById(R.id.videosListView);
+
+        videosListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Video video = (Video) parent.getItemAtPosition(position);
+                watchYoutubeVideo(video.getKey());
+            }
+        });
+    }
+
+    public void watchYoutubeVideo(String id){
+        try{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            getActivity().startActivity(intent);
+        }catch (ActivityNotFoundException ex){
+            Intent intent=new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v="+id));
+            startActivity(intent);
+        }
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        if (savedInstanceState==null) {
+        if (savedInstanceState == null) {
             return;
         }
 
@@ -88,6 +125,8 @@ public class MovieDetailActivityFragment extends Fragment {
                 getActivity().startService(intent);
             }
         });
+
+        new FetchMovieDetailTask(getActivity(), this).execute(movie);
     }
 
     /**
@@ -117,5 +156,38 @@ public class MovieDetailActivityFragment extends Fragment {
     private void extractMovieDetailDataFromIntent() {
         Intent intent = getActivity().getIntent();
         movie = intent.getParcelableExtra(MOVIE_DETAIL_KEY);
+    }
+
+    @Override
+    public void onPreExecute() {
+        UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
+    }
+
+    @Override
+    public void update(DataResult<Movie, Exception> data) {
+        UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
+        if (!data.isException()) {
+            this.movie = data.getData();
+            displayExtraData();
+        } else {
+            Toast.makeText(getActivity(), R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayExtraData() {
+        if (getActivity() != null) {
+            MovieVideosAdapter videosAdapter = new MovieVideosAdapter(getActivity(), movie.getVideos());
+            ListView listView = (ListView) getView().findViewById(R.id.videosListView);
+            listView.setAdapter(videosAdapter);
+        }
+    }
+
+    /**
+     * Creates the Data to show in the indeterminate progress dialog.
+     *
+     * @return Data to show in the indeterminate progress dialog.
+     */
+    private DialogData buildDialogData() {
+        return new DialogData(R.string.app_name, R.string.message_progress_bar, false, android.R.drawable.ic_dialog_alert);
     }
 }

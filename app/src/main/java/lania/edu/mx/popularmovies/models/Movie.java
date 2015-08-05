@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -63,6 +64,12 @@ public class Movie implements Parcelable {
      * vote average for the movie.
      */
     private float voteAverage;
+
+    // TODO Include in parcel
+    private ArrayList<Video> reviews;
+
+    // TODO Include in parcel
+    private ArrayList<Video> videos;
 
     /**
      * Allows to construct an instance of this class to encapsulate the movie with its data.
@@ -195,6 +202,7 @@ public class Movie implements Parcelable {
         dest.writeSerializable(releaseDate);
         dest.writeString(backDropImageName);
         dest.writeFloat(voteAverage);
+
     }
 
     /**
@@ -217,5 +225,21 @@ public class Movie implements Parcelable {
      */
     public float getVoteAverage() {
         return voteAverage;
+    }
+
+    public void setReviews(ArrayList<Video> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void setVideos(ArrayList<Video> videos) {
+        this.videos = videos;
+    }
+
+    public ArrayList<Video> getReviews() {
+        return reviews;
+    }
+
+    public ArrayList<Video> getVideos() {
+        return videos;
     }
 }

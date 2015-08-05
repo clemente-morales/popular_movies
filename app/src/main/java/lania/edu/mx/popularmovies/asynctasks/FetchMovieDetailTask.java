@@ -5,34 +5,33 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
-import lania.edu.mx.popularmovies.models.SortOption;
 import lania.edu.mx.popularmovies.net.resources.MoviesResource;
 import lania.edu.mx.popularmovies.tos.MovieConverter;
-import lania.edu.mx.popularmovies.tos.MovieResponse;
+import lania.edu.mx.popularmovies.tos.ReviewsResponse;
+import lania.edu.mx.popularmovies.tos.VideosResponse;
 
 /**
- * Created by clemente on 7/22/15.
+ * Created by clemente on 8/5/15.
  */
-public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<ArrayList<Movie>, Exception>> {
+public class FetchMovieDetailTask extends AsyncTask<Movie, Void, DataResult<Movie, Exception>> {
     private static final String TAG = FetchMoviesTask.class.getSimpleName();
     public static final String MOVIEDB_API_KEY_PROPERTY = "themoviedb_api_key";
     private final Context context;
 
-    private MovieListener movieListener;
+    private MovieDetailListener movieListener;
 
-    public interface MovieListener {
+    public interface MovieDetailListener {
         void onPreExecute();
 
-        void update(DataResult<ArrayList<Movie>, Exception> data);
+        void update(DataResult<Movie, Exception> data);
     }
 
-    public FetchMoviesTask(Context context, MovieListener movieListener) {
+    public FetchMovieDetailTask(Context context, MovieDetailListener movieListener) {
         this.context = context;
         this.movieListener = movieListener;
     }
@@ -44,17 +43,20 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
     }
 
     @Override
-    protected DataResult<ArrayList<Movie>, Exception> doInBackground(SortOption... params) {
-        SortOption sortOption = params[0];
+    protected DataResult<Movie, Exception> doInBackground(Movie... params) {
+        Movie sortOption = params[0];
         return getRealData(sortOption);
     }
 
-    private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
+    private DataResult<Movie, Exception> getRealData(Movie movie) {
         try {
             MoviesResource resource = PopularMoviesApplication.getObjectGraph().providesMoviesResource();
-            MovieResponse response = resource.getMovies(sortOption.getOrder(), getKey());
-            ArrayList<Movie> result = MovieConverter.toModel(response);
-            return DataResult.createDataResult(result);
+
+            ReviewsResponse reviewsResponse = resource.getReviews(movie.getId(), getKey());
+            VideosResponse videosResponse = resource.getVideos(movie.getId(), getKey());
+            movie.setReviews(MovieConverter.toModel(videosResponse));
+            movie.setVideos(MovieConverter.toModel(videosResponse));
+            return DataResult.createDataResult(movie);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
             return DataResult.createExceptionResult(e);
@@ -68,7 +70,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
     }
 
     @Override
-    protected void onPostExecute(DataResult<ArrayList<Movie>, Exception> moviesResult) {
+    protected void onPostExecute(DataResult<Movie, Exception> moviesResult) {
         super.onPostExecute(moviesResult);
         movieListener.update(moviesResult);
     }

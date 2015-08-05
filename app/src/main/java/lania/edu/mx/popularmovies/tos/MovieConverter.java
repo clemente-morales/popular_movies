@@ -44,6 +44,34 @@ public final class MovieConverter {
         return movies;
     }
 
+    public static lania.edu.mx.popularmovies.models.Review toModel(lania.edu.mx.popularmovies.tos.Review review) {
+        return new lania.edu.mx.popularmovies.models.Review(review.getId(), review.getAuthor(), review.getContent(), review.getUrl());
+    }
+
+    public static ArrayList<lania.edu.mx.popularmovies.models.Review> toModel(ReviewsResponse response) {
+        ArrayList<lania.edu.mx.popularmovies.models.Review> reviews = new ArrayList<lania.edu.mx.popularmovies.models.Review>();
+
+        for (lania.edu.mx.popularmovies.tos.Review review : response.getReviews()) {
+            reviews.add(toModel(review));
+        }
+
+        return reviews;
+    }
+
+    public static lania.edu.mx.popularmovies.models.Video toModel(lania.edu.mx.popularmovies.tos.Video video) {
+        return new lania.edu.mx.popularmovies.models.Video(video.getId(), video.getKey(), video.getName(), video.getSize(), video.getType(), video.getSite(), video.getIso());
+    }
+
+    public static ArrayList<lania.edu.mx.popularmovies.models.Video> toModel(VideosResponse response) {
+        ArrayList<lania.edu.mx.popularmovies.models.Video> reviews = new ArrayList<lania.edu.mx.popularmovies.models.Video>();
+
+        for (lania.edu.mx.popularmovies.tos.Video Video : response.getVideos()) {
+            reviews.add(toModel(Video));
+        }
+
+        return reviews;
+    }
+
     public static lania.edu.mx.popularmovies.models.Movie toModel(Cursor cursor) {
         return new lania.edu.mx.popularmovies.models.Movie(cursor.getInt(COLUMN_ID_INDEX), cursor.getString(COLUMN_TITLE_INDEX),
                 cursor.getString(COLUMN_POSTER_IMAGE_INDEX),

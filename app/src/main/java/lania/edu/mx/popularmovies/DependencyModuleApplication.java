@@ -35,7 +35,7 @@ public class DependencyModuleApplication {
     /**
      * Base uri to discover the movies.
      */
-    public static final String BASE_URI_TO_DISCOVER_MOVIES = "http://api.themoviedb.org/3/discover";
+    public static final String BASE_URI_TO_DISCOVER_MOVIES = "http://api.themoviedb.org/3";
 
     /**
      * Path to the properties file.
