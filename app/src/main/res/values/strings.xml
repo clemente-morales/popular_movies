@@ -8,6 +8,7 @@
     <string name="movieMarkAsFavoriteButton">Mark as favorite</string>
     <string name="movieMarkAsFavorite">Movie %s marked as favorite.</string>
     <string name="movieAlreadyMarkAsFavorite">The movie %s has already marked as favorite.</string>
+    <string name="movieVideosHeader">Trailers</string>
     <string name="message_progress_bar">Loading data...</string>
     <string name="error_connection_message">Error getting the data. Try it later.</string>
 

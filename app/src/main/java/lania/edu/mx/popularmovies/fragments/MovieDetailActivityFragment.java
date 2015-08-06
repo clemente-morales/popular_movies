@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailActivityFragment extends Fragment implements FetchMovieDetailTask.MovieDetailListener {
+
+    private static final String TAG = MovieDetailActivityFragment.class.getSimpleName();
 
     public static final String MOVIE_DETAIL_KEY = "MovieDetailKey";
 
@@ -176,9 +179,12 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     private void displayExtraData() {
         if (getActivity() != null) {
+            Log.d(TAG, "Videos "+movie.getVideos());
             MovieVideosAdapter videosAdapter = new MovieVideosAdapter(getActivity(), movie.getVideos());
             ListView listView = (ListView) getView().findViewById(R.id.videosListView);
+            View header = getActivity().getLayoutInflater().inflate(R.layout.movie_videos_header, null);
             listView.setAdapter(videosAdapter);
+            //listView.addHeaderView(header, null, false);
         }
     }
 
