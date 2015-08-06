@@ -67,8 +67,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
         Cursor movieCursor = context.getContentResolver().query(PopularMoviesContract.MovieEntry.CONTENT_URI, MOVIE_COLUMNS, null, null, null);
 
         ArrayList<Movie> movies = new ArrayList<>();
-        while(movieCursor.moveToFirst()) {
-            Log.d(TAG, ""+movieCursor);
+        while(movieCursor.moveToNext()) {
             movies.add(MovieConverter.toModel(movieCursor));
         }
         movieCursor.close();
