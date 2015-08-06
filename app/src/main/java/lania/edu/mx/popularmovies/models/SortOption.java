@@ -3,16 +3,20 @@ package lania.edu.mx.popularmovies.models;
 import android.util.Log;
 import android.util.SparseArray;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by clemente on 7/23/15.
  */
 public enum SortOption {
     POPULARITY(SortOption.POPULARITY_ID, "popularity.desc"),
-    RAITING(SortOption.RAITING_ID, "vote_average.desc");
+    RAITING(SortOption.RAITING_ID, "vote_average.desc"),
+    FAVORITE(SortOption.FAVORITE_ID, StringUtils.EMPTY);
 
     private static final String TAG = SortOption.class.getSimpleName();
     private static final int POPULARITY_ID = 1;
     private static final int RAITING_ID = 2;
+    private static final int FAVORITE_ID = 3;
 
     private final int id;
     private final String order;

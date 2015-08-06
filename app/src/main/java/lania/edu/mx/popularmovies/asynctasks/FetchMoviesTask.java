@@ -1,6 +1,7 @@
 package lania.edu.mx.popularmovies.asynctasks;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import lania.edu.mx.popularmovies.PopularMoviesApplication;
+import lania.edu.mx.popularmovies.data.PopularMoviesContract;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.SortOption;
@@ -46,7 +48,32 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
     @Override
     protected DataResult<ArrayList<Movie>, Exception> doInBackground(SortOption... params) {
         SortOption sortOption = params[0];
-        return getRealData(sortOption);
+        return sortOption == SortOption.FAVORITE ? getFavoriteMovies() : getRealData(sortOption);
+    }
+
+    public DataResult<ArrayList<Movie>,Exception> getFavoriteMovies() {
+
+        final String[] MOVIE_COLUMNS = {
+                PopularMoviesContract.MovieEntry.ID,
+                PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE,
+                PopularMoviesContract.MovieEntry.COLUMN_POPULARITY,
+                PopularMoviesContract.MovieEntry.COLUMN_POSTER_IMAGE,
+                PopularMoviesContract.MovieEntry.COLUMN_RELEASE_DATE,
+                PopularMoviesContract.MovieEntry.COLUMN_SYNOPSIS,
+                PopularMoviesContract.MovieEntry.COLUMN_TITLE,
+                PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE
+        };
+
+        Cursor movieCursor = context.getContentResolver().query(PopularMoviesContract.MovieEntry.CONTENT_URI, MOVIE_COLUMNS, null, null, null);
+
+        ArrayList<Movie> movies = new ArrayList<>();
+        while(movieCursor.moveToFirst()) {
+            Log.d(TAG, ""+movieCursor);
+            movies.add(MovieConverter.toModel(movieCursor));
+        }
+        movieCursor.close();
+
+        return DataResult.createDataResult(movies);
     }
 
     private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
