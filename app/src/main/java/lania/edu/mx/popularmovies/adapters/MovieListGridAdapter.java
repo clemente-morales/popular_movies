@@ -1,6 +1,7 @@
 package lania.edu.mx.popularmovies.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,15 +9,19 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import lania.edu.mx.popularmovies.models.Movie;
+import lania.edu.mx.popularmovies.utils.IOHelper;
 
 /**
  * Created by clemente on 7/29/15.
  */
 public class MovieListGridAdapter extends BaseAdapter {
+    private static final String TAG = MovieListGridAdapter.class.getSimpleName();
+    public static final String MOVIE_IMAGE_URL_FORMAT = "http://image.tmdb.org/t/p/w185/%s";
     /**
      * Context to inflate the views.
      */
@@ -59,7 +64,6 @@ public class MovieListGridAdapter extends BaseAdapter {
         ImageView imageView;
 
         if (convertView == null) {
-
             imageView = new ImageView(context);
             imageView.setAdjustViewBounds(true);
         } else {
@@ -67,7 +71,15 @@ public class MovieListGridAdapter extends BaseAdapter {
         }
 
         Movie movie = movies.get(position);
-        displayImage(movie.getPosterImageName(), imageView);
+
+        if (movie.isMarkedAsFavorite()) {
+            File folder = IOHelper.getDataFolder(context, Movie.IMAGE_PATH);
+            File imageFile = new File(folder, movie.getPosterImageName());
+            Log.d(TAG, "" + imageFile);
+            Picasso.with(context).load(imageFile).into(imageView);
+        } else {
+            displayImage(String.format(MOVIE_IMAGE_URL_FORMAT, movie.getPosterImageName()), imageView);
+        }
 
         return imageView;
     }
@@ -75,10 +87,10 @@ public class MovieListGridAdapter extends BaseAdapter {
     /**
      * Allows to display the movie thumbail image
      *
-     * @param imageName Name of the image to display.
+     * @param imagePath Path to the image to load.
      * @param imageView Control to display the thumbail image for the movie
      */
-    private void displayImage(String imageName, ImageView imageView) {
-        Picasso.with(context).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
+    private void displayImage(String imagePath, ImageView imageView) {
+        Picasso.with(context).load(imagePath).into(imageView);
     }
 }

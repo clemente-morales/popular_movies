@@ -25,6 +25,8 @@ public class Movie implements Parcelable {
      */
     public static final int MAX_STARTS = 5;
 
+    public static final String IMAGE_PATH = "movieImages";
+
     /**
      * Original title.
      */
@@ -65,6 +67,11 @@ public class Movie implements Parcelable {
      */
     private float voteAverage;
 
+    /**
+     * If the movie is marked as favorite.
+     */
+    private boolean markedAsFavorite;
+
     // TODO Include in parcel
     private ArrayList<Video> reviews;
 
@@ -83,7 +90,8 @@ public class Movie implements Parcelable {
      * @param backDropImageName Movie backdrop image name.
      * @param voteAverage       Vote average for the movie.
      */
-    public Movie(int id, String title, String posterImageName, String synopsis, float popularity, Date releaseDate, String backDropImageName, float voteAverage) {
+    public Movie(int id, String title, String posterImageName, String synopsis, float popularity,
+                 Date releaseDate, String backDropImageName, float voteAverage) {
         this.id = id;
         this.title = title;
         this.posterImageName = posterImageName;
@@ -108,6 +116,7 @@ public class Movie implements Parcelable {
         this.releaseDate = (Date) source.readSerializable();
         this.backDropImageName = source.readString();
         this.voteAverage = source.readFloat();
+        this.markedAsFavorite = source.readInt() == 1 ? true : false;
     }
 
     /**
@@ -202,7 +211,7 @@ public class Movie implements Parcelable {
         dest.writeSerializable(releaseDate);
         dest.writeString(backDropImageName);
         dest.writeFloat(voteAverage);
-
+        dest.writeInt(markedAsFavorite ? 1 : 0);
     }
 
     /**
@@ -233,6 +242,14 @@ public class Movie implements Parcelable {
 
     public void setVideos(ArrayList<Video> videos) {
         this.videos = videos;
+    }
+
+    public boolean isMarkedAsFavorite() {
+        return markedAsFavorite;
+    }
+
+    public void setMarkedAsFavorite(boolean markedAsFavorite) {
+        this.markedAsFavorite = markedAsFavorite;
     }
 
     public ArrayList<Video> getReviews() {

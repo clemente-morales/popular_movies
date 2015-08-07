@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,6 +31,7 @@ import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.models.Video;
 import lania.edu.mx.popularmovies.services.MoviesService;
+import lania.edu.mx.popularmovies.utils.IOHelper;
 import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
 /**
@@ -105,7 +107,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
      */
     private void displayData() {
         ImageView thumbailImage = (ImageView) getActivity().findViewById(R.id.movieThumbailImageView);
-        displayImage(movie.getPosterImageName(), thumbailImage);
+        displayImage(movie.getPosterImageName(), thumbailImage, movie.isMarkedAsFavorite());
 
         TextView title = (TextView) getActivity().findViewById(R.id.movieTitleTextView);
         title.setText(movie.getTitle());
@@ -145,12 +147,18 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     /**
      * Allows to display the movie thumbail image
-     *
-     * @param imageName Name of the image to display.
+     *  @param imageName Name of the image to display.
      * @param imageView Control to display the thumbail image for the movie
+     * @param markedAsFavorite If the movie was marked as favorite.
      */
-    private void displayImage(String imageName, ImageView imageView) {
-        Picasso.with(getActivity()).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
+    private void displayImage(String imageName, ImageView imageView, boolean markedAsFavorite) {
+        if (markedAsFavorite) {
+            File folder = IOHelper.getDataFolder(getActivity(), Movie.IMAGE_PATH);
+            File imageFile = new File(folder, movie.getPosterImageName());
+            Picasso.with(getActivity()).load(imageFile).into(imageView);
+        } else {
+            Picasso.with(getActivity()).load(String.format("http://image.tmdb.org/t/p/w185/%s", imageName)).into(imageView);
+        }
     }
 
     /**

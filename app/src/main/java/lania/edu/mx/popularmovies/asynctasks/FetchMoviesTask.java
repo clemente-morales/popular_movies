@@ -68,7 +68,9 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
 
         ArrayList<Movie> movies = new ArrayList<>();
         while(movieCursor.moveToNext()) {
-            movies.add(MovieConverter.toModel(movieCursor));
+            Movie movie = MovieConverter.toModel(movieCursor);
+            movie.setMarkedAsFavorite(true);
+            movies.add(movie);
         }
         movieCursor.close();
 
