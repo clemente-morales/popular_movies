@@ -54,7 +54,7 @@ public class FetchMovieDetailTask extends AsyncTask<Movie, Void, DataResult<Movi
 
             ReviewsResponse reviewsResponse = resource.getReviews(movie.getId(), getKey());
             VideosResponse videosResponse = resource.getVideos(movie.getId(), getKey());
-            movie.setReviews(MovieConverter.toModel(videosResponse));
+            movie.setReviews(MovieConverter.toModel(reviewsResponse));
             movie.setVideos(MovieConverter.toModel(videosResponse));
             return DataResult.createDataResult(movie);
         } catch (Exception e) {

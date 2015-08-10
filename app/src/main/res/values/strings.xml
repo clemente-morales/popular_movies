@@ -25,4 +25,6 @@
     <string name="RetrofitError_unauthorized">You are unauthorized to execute this operation.</string>
     <string name="RetrofitError_resource_not_found">Resource not found.</string>
     <string name="RetrofitError_internal_server_error">Internal server error. Contac technical support.</string>
+    <string name="videosTextViewLabel">Traillers</string>
+    <string name="reviewsTextViewLabel">Reviews</string>
 </resources>

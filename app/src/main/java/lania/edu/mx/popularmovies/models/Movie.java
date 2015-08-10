@@ -73,7 +73,7 @@ public class Movie implements Parcelable {
     private boolean markedAsFavorite;
 
     // TODO Include in parcel
-    private ArrayList<Video> reviews;
+    private ArrayList<Review> reviews;
 
     // TODO Include in parcel
     private ArrayList<Video> videos;
@@ -236,7 +236,7 @@ public class Movie implements Parcelable {
         return voteAverage;
     }
 
-    public void setReviews(ArrayList<Video> reviews) {
+    public void setReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
     }
 
@@ -252,7 +252,7 @@ public class Movie implements Parcelable {
         this.markedAsFavorite = markedAsFavorite;
     }
 
-    public ArrayList<Video> getReviews() {
+    public ArrayList<Review> getReviews() {
         return reviews;
     }
 

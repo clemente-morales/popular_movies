@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lania.edu.mx.popularmovies.R;
+import lania.edu.mx.popularmovies.adapters.MovieReviewsAdapter;
 import lania.edu.mx.popularmovies.adapters.MovieVideosAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMovieDetailTask;
 import lania.edu.mx.popularmovies.models.DataResult;
@@ -190,9 +191,12 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
             Log.d(TAG, "Videos "+movie.getVideos());
             MovieVideosAdapter videosAdapter = new MovieVideosAdapter(getActivity(), movie.getVideos());
             ListView listView = (ListView) getView().findViewById(R.id.videosListView);
-            View header = getActivity().getLayoutInflater().inflate(R.layout.movie_videos_header, null);
             listView.setAdapter(videosAdapter);
-            //listView.addHeaderView(header, null, false);
+
+            Log.d(TAG, "Reviews " + movie.getReviews());
+            MovieReviewsAdapter reviewsAdapter = new MovieReviewsAdapter(getActivity(), movie.getReviews());
+            ListView reviewsListView = (ListView) getView().findViewById(R.id.reviewsListView);
+            reviewsListView.setAdapter(reviewsAdapter);
         }
     }
 
