@@ -78,7 +78,7 @@ public class PopularMoviesProviderTest extends AndroidTestCase {
     public void testSelectAllMoviesQuery() {
         PopularMoviesDbHelper dbHelper = new PopularMoviesDbHelper(mContext);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues contentValues = TestUtilities.crearDummyValues();
+        ContentValues contentValues = TestUtilities.createMovieDummyValues();
         long id = database.insert(PopularMoviesContract.MovieEntry.TABLE_NAME, null, contentValues);
         database.close();
 
@@ -92,7 +92,7 @@ public class PopularMoviesProviderTest extends AndroidTestCase {
      * Allows to test the insertion with the provider.
      */
     public void testInsertProvider() {
-        ContentValues values = TestUtilities.crearDummyValues();
+        ContentValues values = TestUtilities.createMovieDummyValues();
 
         // Register a content observer for our insert. This observer is linked with the Content Uri.
         TestUtilities.TestContentObserver movieContentObserver = TestUtilities.getTestContentObserver();

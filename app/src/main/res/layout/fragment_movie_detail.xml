@@ -74,7 +74,7 @@
         </RelativeLayout>
 
         <View
-            android:id="@+id/viewLine"
+            android:id="@+id/traillersViewLine"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#000000"
@@ -88,8 +88,15 @@
         <ListView
             android:id="@+id/videosListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:divider="#000000"
+            android:dividerHeight="2dp"/>
+        <View
+            android:id="@+id/reviewsViewLine"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#000000"
+            android:padding="10dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,6 +105,8 @@
         <ListView
             android:id="@+id/reviewsListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:divider="#000000"
+            android:dividerHeight="2dp"/>
     </LinearLayout>
 </ScrollView>

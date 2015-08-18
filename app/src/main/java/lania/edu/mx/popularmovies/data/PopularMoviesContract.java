@@ -25,7 +25,17 @@ public class PopularMoviesContract {
     public static final String MOVIE_PATH = "movie";
 
     /**
-     * Defines the contents of the movie table.
+     * Path to look for the videos of a movie.
+     */
+    public static final String VIDEO_PATH = "video";
+
+    /**
+     * Path to look for the reviews of a movie.
+     */
+    public static final String REVIEW_PATH = "review";
+
+    /**
+     * Defines the contents of the Movie table.
      */
     public static final class MovieEntry implements BaseColumns {
         /**
@@ -87,7 +97,112 @@ public class PopularMoviesContract {
 
         /**
          * Creates a new uri with the id appended to the end of the path.
+         *
          * @param id Id of the movie.
+         * @return Uri with the id appended to the end of the path.
+         */
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    /**
+     * Defines the contents of the Video table.
+     */
+    public static final class VideoEntry implements BaseColumns {
+        /**
+         * Table name to save the data for the video.
+         */
+        public static final String TABLE_NAME = "video";
+
+        /**
+         * Column name to store the id of the movie.
+         */
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+
+        /**
+         * Column name to store the name of the video.
+         */
+        public static final String COLUMN_NAME = "name";
+
+        /**
+         * Column name to store the key for the video.
+         */
+        public static final String COLUMN_KEY = "key";
+
+        /**
+         * Uri to look for the videos of a movie.
+         */
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
+                .appendPath("{movieId}").appendPath(VIDEO_PATH).build();
+
+        /**
+         * MIME type to represent a directory with the videos of a movie.
+         */
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
+
+        /**
+         * MIME type to represent a video of a movie.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
+
+        /**
+         * Creates a new uri with the id appended to the end of the path.
+         * @param id Id of the video.
+         * @return Uri with the id appended to the end of the path.
+         */
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
+    /**
+     * Defines the contents of the Review table.
+     */
+    public static final class ReviewEntry implements BaseColumns {
+        /**
+         * Table name to save the data for the Review.
+         */
+        public static final String TABLE_NAME = "review";
+
+        /**
+         * Column name to store the id of the movie.
+         */
+        public static final String COLUMN_MOVIE_ID = "movie_id";
+
+        /**
+         * Column name to store the author of the review.
+         */
+        public static final String COLUMN_AUTHOR = "author";
+
+        /**
+         * Column name to store the content of the review.
+         */
+        public static final String COLUMN_CONTENT = "content";
+
+        /**
+         * Uri to look for the reviews of a movie.
+         */
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
+                .appendPath("{movieId}").appendPath(REVIEW_PATH).build();
+
+        /**
+         * MIME type to represent a directory with the videos of a movie.
+         */
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
+
+        /**
+         * MIME type to represent a video of a movie.
+         */
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
+
+        /**
+         * Creates a new uri with the id appended to the end of the path.
+         * @param id Id of the video.
          * @return Uri with the id appended to the end of the path.
          */
         public static Uri buildMovieUri(long id) {

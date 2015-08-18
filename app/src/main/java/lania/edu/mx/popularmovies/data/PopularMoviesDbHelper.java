@@ -41,12 +41,28 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
                 PopularMoviesContract.MovieEntry.COLUMN_POSTER_IMAGE + " TEXT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE + " TEXT NULL);";
 
+        final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + PopularMoviesContract.VideoEntry.TABLE_NAME + " (" +
+                PopularMoviesContract.VideoEntry.ID + " INTEGER PRIMARY KEY," +
+                PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID + " INT NOT NULL," +
+                PopularMoviesContract.VideoEntry.COLUMN_NAME + " TEXT NOT NULL," +
+                PopularMoviesContract.VideoEntry.COLUMN_KEY + " TEXT NOT NULL);";
+
+        final String SQL_CREATE_REVIEW_TABLE = "CREATE TABLE " + PopularMoviesContract.ReviewEntry.TABLE_NAME + " (" +
+                PopularMoviesContract.ReviewEntry.ID + " INTEGER PRIMARY KEY," +
+                PopularMoviesContract.ReviewEntry.COLUMN_MOVIE_ID + " INT NOT NULL," +
+                PopularMoviesContract.ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL," +
+                PopularMoviesContract.ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL);";
+
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_VIDEO_TABLE);
+        db.execSQL(SQL_CREATE_REVIEW_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // We don't need to keep data on schema update
+        db.execSQL("DROP TABLE IF EXISTS " + PopularMoviesContract.VideoEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PopularMoviesContract.ReviewEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + PopularMoviesContract.MovieEntry.TABLE_NAME);
         onCreate(db);
     }

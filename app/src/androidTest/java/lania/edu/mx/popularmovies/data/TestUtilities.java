@@ -54,8 +54,8 @@ public class TestUtilities extends AndroidTestCase {
      * Allows to create a dummy value to insert for a movie.
      * @return Dummy value to insert for a movie.
      */
-    public static ContentValues crearDummyValues() {
-        return crearDummyValues(135397);
+    public static ContentValues createMovieDummyValues() {
+        return createMovieDummyValues(135397);
     }
 
     /**
@@ -67,7 +67,7 @@ public class TestUtilities extends AndroidTestCase {
 
         int movieIdBase = 135397;
         for (int i = 0; i < 5; i++) {
-            values[i] = crearDummyValues(++movieIdBase);
+            values[i] = createMovieDummyValues(++movieIdBase);
         }
 
         return values;
@@ -78,7 +78,7 @@ public class TestUtilities extends AndroidTestCase {
      * @param movieId Id of the movie.
      * @return ContentValue with the data of the movie.
      */
-    private static ContentValues crearDummyValues(int movieId) {
+    private static ContentValues createMovieDummyValues(int movieId) {
         ContentValues values = new ContentValues();
         values.put(PopularMoviesContract.MovieEntry.ID, movieId);
         values.put(PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE, "dkMD5qlogeRMiEixC4YNPUvax2T.jpg");
@@ -91,6 +91,16 @@ public class TestUtilities extends AndroidTestCase {
                 "Jurassic World, as originally envisioned by John Hammond.");
         values.put(PopularMoviesContract.MovieEntry.COLUMN_TITLE, "Jurassic World");
         values.put(PopularMoviesContract.MovieEntry.COLUMN_VOTE_AVERAGE, 7.7);
+        return values;
+    }
+
+    public static ContentValues createVideoDummyValues(long movieId) {
+        ContentValues values = new ContentValues();
+        values.put(PopularMoviesContract.VideoEntry.ID, movieId);
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID, movieId);
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_KEY, "");
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_NAME, "");
+        values.put(PopularMoviesContract.VideoEntry.CONTENT_ITEM_TYPE, "");
         return values;
     }
 
