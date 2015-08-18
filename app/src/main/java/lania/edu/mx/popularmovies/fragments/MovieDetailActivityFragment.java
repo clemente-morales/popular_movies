@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +38,7 @@ import lania.edu.mx.popularmovies.services.MoviesService;
 import lania.edu.mx.popularmovies.utils.IOHelper;
 import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
 
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -44,14 +48,18 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     public static final String MOVIE_DETAIL_KEY = "MovieDetailKey";
 
-    private static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
-
     /**
      * Tag for the progress dialog.
      */
     public static final String PROGRESS_DIALOG_TAG = "LoadingData";
 
     private Movie movie;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +83,37 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
                 watchYoutubeVideo(video.getKey());
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_detail, menu);
+    }
+
+    private void setSharedIntent() {
+        Log.d(TAG, "setSharedIntent");
+        if (movie.getVideos() != null && movie.getVideos().size() > 0) {
+            Log.d(TAG, "with videos");
+            Video video = movie.getVideos().get(0);
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + video.getKey());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.shareVideoMenuItem) {
+            Log.d(TAG, "onOptionsItemSelected");
+            setSharedIntent();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void watchYoutubeVideo(String id){
@@ -206,6 +245,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
      * @return Data to show in the indeterminate progress dialog.
      */
     private DialogData buildDialogData() {
-        return new DialogData(R.string.app_name, R.string.message_progress_bar, false, android.R.drawable.ic_dialog_alert);
+        return new DialogData(R.string.app_name, R.string.message_progress_bar, false,
+                android.R.drawable.ic_dialog_alert);
     }
 }

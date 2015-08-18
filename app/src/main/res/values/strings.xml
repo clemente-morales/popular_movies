@@ -11,6 +11,7 @@
     <string name="movieVideosHeader">Trailers</string>
     <string name="message_progress_bar">Loading data...</string>
     <string name="error_connection_message">Error getting the data. Try it later.</string>
+    <string name="movieDetail_shared_video">Share</string>
 
     <!-- Movie settings-->
     <string name="action_settings">Movie Settings</string>
@@ -19,7 +20,7 @@
     <string name="preferences_order_default_value">1</string>
 
 
-    <!-- RetroFi -->
+    <!-- Retrofit -->
     <string name="RetrofitError_unable_to_connect">Could not establish connection.</string>
     <string name="RetrofitError_not_response_back">Not response back from server.</string>
     <string name="RetrofitError_unauthorized">You are unauthorized to execute this operation.</string>

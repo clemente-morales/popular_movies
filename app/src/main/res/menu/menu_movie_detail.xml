@@ -2,6 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="lania.edu.mx.popularmovies.activities.MovieDetailActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/shareVideoMenuItem"
+        android:title="@string/movieDetail_shared_video"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="ifRoom" />
 </menu>
