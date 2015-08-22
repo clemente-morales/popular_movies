@@ -56,23 +56,23 @@
                 android:numStars="5"
                 android:stepSize="0.1" />
 
-            <Button
-                android:id="@+id/markAsFavoriteButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/movieThumbailImageView"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@id/movieThumbailImageView"
-                android:background="#009688"
-                android:text="@string/movieMarkAsFavoriteButton" />
-
             <TextView
                 android:id="@+id/movieSynopsisTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movieThumbailImageView" />
+                android:layout_below="@id/movieRatingBar"
+                android:layout_toRightOf="@id/movieThumbailImageView"
+                />
+
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/markAsFavoriteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#009688"
+            android:text="@string/movieMarkAsFavoriteButton" />
 
         <View
             android:id="@+id/traillersViewLine"
@@ -84,7 +84,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/videosTextViewLabel" />
+            android:text="@string/videosTextViewLabel"
+            android:textStyle="bold"/>
 
         <ListView
             android:id="@+id/videosListView"
@@ -101,7 +102,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reviewsTextViewLabel" />
+            android:text="@string/reviewsTextViewLabel"
+            android:textStyle="bold"/>
 
         <ListView
             android:id="@+id/reviewsListView"

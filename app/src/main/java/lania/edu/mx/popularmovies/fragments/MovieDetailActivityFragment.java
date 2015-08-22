@@ -116,6 +116,8 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
             sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + video.getKey());
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
+        }else {
+            Toast.makeText(getActivity(), getString(R.string.movieDetail_no_thrillers_to_share), Toast.LENGTH_SHORT).show();
         }
     }
 
