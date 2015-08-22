@@ -20,16 +20,19 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.adapters.MovieReviewsAdapter;
 import lania.edu.mx.popularmovies.adapters.MovieVideosAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMovieDetailTask;
+import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
@@ -90,6 +93,18 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
         inflater.inflate(R.menu.menu_movie_detail, menu);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        PopularMoviesApplication.getEventBus().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        PopularMoviesApplication.getEventBus().unregister(this);
+        super.onPause();
+    }
+
     private void setSharedIntent() {
         Log.d(TAG, "setSharedIntent");
         if (movie.getVideos() != null && movie.getVideos().size() > 0) {
@@ -116,13 +131,13 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
         return super.onOptionsItemSelected(item);
     }
 
-    public void watchYoutubeVideo(String id){
-        try{
+    public void watchYoutubeVideo(String id) {
+        try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
             getActivity().startActivity(intent);
-        }catch (ActivityNotFoundException ex){
-            Intent intent=new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://www.youtube.com/watch?v="+id));
+        } catch (ActivityNotFoundException ex) {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v=" + id));
             startActivity(intent);
         }
     }
@@ -142,36 +157,44 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
         outState.putParcelable("MovieSerializationId", movie);
     }
 
+    @Subscribe
+    public void onMovieSelection(MovieSelectionChangeEvent event) {
+        movie = event.getMovie();
+        displayData();
+    }
+
     /**
      * Allows to dipslay the detail of a movie.
      */
     private void displayData() {
-        ImageView thumbailImage = (ImageView) getActivity().findViewById(R.id.movieThumbailImageView);
-        displayImage(movie.getPosterImageName(), thumbailImage, movie.isMarkedAsFavorite());
+        if (movie != null) {
+            ImageView thumbailImage = (ImageView) getView().findViewById(R.id.movieThumbailImageView);
+            displayImage(movie.getPosterImageName(), thumbailImage, movie.isMarkedAsFavorite());
 
-        TextView title = (TextView) getActivity().findViewById(R.id.movieTitleTextView);
-        title.setText(movie.getTitle());
+            TextView title = (TextView) getActivity().findViewById(R.id.movieTitleTextView);
+            title.setText(movie.getTitle());
 
-        TextView synopsis = (TextView) getActivity().findViewById(R.id.movieSynopsisTextView);
-        synopsis.setText(movie.getSynopsis());
+            TextView synopsis = (TextView) getActivity().findViewById(R.id.movieSynopsisTextView);
+            synopsis.setText(movie.getSynopsis());
 
-        TextView release = (TextView) getActivity().findViewById(R.id.movieReleaseDateTextView);
-        release.setText(formatDate(movie.getReleaseDate()));
+            TextView release = (TextView) getActivity().findViewById(R.id.movieReleaseDateTextView);
+            release.setText(formatDate(movie.getReleaseDate()));
 
-        RatingBar raitingBar = (RatingBar) getActivity().findViewById(R.id.movieRatingBar);
-        raitingBar.setRating(movie.getPopularity());
+            RatingBar raitingBar = (RatingBar) getActivity().findViewById(R.id.movieRatingBar);
+            raitingBar.setRating(movie.getPopularity());
 
-        Button button = (Button) getActivity().findViewById(R.id.markAsFavoriteButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MoviesService.class);
-                intent.putExtra(MoviesService.MOVIE_DATA_KEY, movie);
-                getActivity().startService(intent);
-            }
-        });
+            Button button = (Button) getActivity().findViewById(R.id.markAsFavoriteButton);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), MoviesService.class);
+                    intent.putExtra(MoviesService.MOVIE_DATA_KEY, movie);
+                    getActivity().startService(intent);
+                }
+            });
 
-        new FetchMovieDetailTask(getActivity(), this).execute(movie);
+            new FetchMovieDetailTask(getActivity(), this).execute(movie);
+        }
     }
 
     /**
@@ -187,8 +210,9 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     /**
      * Allows to display the movie thumbail image
-     *  @param imageName Name of the image to display.
-     * @param imageView Control to display the thumbail image for the movie
+     *
+     * @param imageName        Name of the image to display.
+     * @param imageView        Control to display the thumbail image for the movie
      * @param markedAsFavorite If the movie was marked as favorite.
      */
     private void displayImage(String imageName, ImageView imageView, boolean markedAsFavorite) {
@@ -227,7 +251,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     private void displayExtraData() {
         if (getActivity() != null) {
-            Log.d(TAG, "Videos "+movie.getVideos());
+            Log.d(TAG, "Videos " + movie.getVideos());
             MovieVideosAdapter videosAdapter = new MovieVideosAdapter(getActivity(), movie.getVideos());
             ListView listView = (ListView) getView().findViewById(R.id.videosListView);
             listView.setAdapter(videosAdapter);

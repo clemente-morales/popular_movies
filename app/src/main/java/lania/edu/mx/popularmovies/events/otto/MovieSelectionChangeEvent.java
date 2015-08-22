@@ -6,13 +6,13 @@ import lania.edu.mx.popularmovies.models.Movie;
  * Created by clemente on 8/3/15.
  */
 public class MovieSelectionChangeEvent {
-    private final Movie movieUri;
+    private final Movie movie;
 
-    public MovieSelectionChangeEvent(Movie movieUri) {
-        this.movieUri = movieUri;
+    public MovieSelectionChangeEvent(Movie movie) {
+        this.movie = movie;
     }
 
-    public Movie getMovieUri() {
-        return movieUri;
+    public Movie getMovie() {
+        return movie;
     }
 }

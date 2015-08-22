@@ -145,7 +145,6 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     }
 
     private void displayMovies() {
-
         if (getActivity() != null) {
             MovieListGridAdapter adapter = new MovieListGridAdapter(getActivity(), movies);
             GridView gridview = (GridView) getView().findViewById(R.id.gridview);

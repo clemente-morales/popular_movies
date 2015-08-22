@@ -3,6 +3,7 @@ package lania.edu.mx.popularmovies.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (findViewById(R.id.movie_detail_container) != null) {
             twoPane = true;
+            Log.d(TAG, "two pane");
 
             if (savedInstanceState == null) {
                 getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onItemSelected(Movie movie) {
+        Log.d(TAG, "onItemSelected");
         if (twoPane) {
             PopularMoviesApplication.getEventBus().post(new MovieSelectionChangeEvent(movie));
         } else {
