@@ -18,6 +18,7 @@ import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.adapters.MovieListGridAdapter;
 import lania.edu.mx.popularmovies.asynctasks.FetchMoviesTask;
+import lania.edu.mx.popularmovies.events.otto.SortOrderChangedEvent;
 import lania.edu.mx.popularmovies.models.DataResult;
 import lania.edu.mx.popularmovies.models.DialogData;
 import lania.edu.mx.popularmovies.models.Movie;
@@ -29,10 +30,7 @@ import lania.edu.mx.popularmovies.utils.UserInterfaceHelper;
  * Created by clemente on 7/22/15.
  */
 public class MovieListFragment extends Fragment implements FetchMoviesTask.MovieListener {
-    /**
-     * Data to pass to de detail of the movie.
-     */
-    public static final String MOVIE_DATA_EXTRA = "MovieData";
+    private static final String TAG = MovieListFragment.class.getSimpleName();
 
     /**
      * Key to restore the movies.
@@ -87,43 +85,22 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
 
     @Override
     public void onResume() {
-        super.onResume();
         PopularMoviesApplication.getEventBus().register(this);
+        super.onResume();
+
+        // if the user is returning from the settings,  we check if the selection order was change
+        // to launch the query again.
+        if (sortOption != getSortOrderFromPreferences()) {
+            PopularMoviesApplication.getEventBus().post(new SortOrderChangedEvent());
+            sortOption = getSortOrderFromPreferences();
+            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+        }
     }
 
     @Override
     public void onPause() {
         PopularMoviesApplication.getEventBus().unregister(this);
         super.onPause();
-    }
-
-    /**
-     * Allows to restore the previous state of the fragment.
-     *
-     * @param savedInstanceState Previous state of the fragment..
-     */
-    private void restoreMovieState(Bundle savedInstanceState) {
-        if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
-            sortOption = getSortOrderFromPreferences();
-            new FetchMoviesTask(getActivity(), this).execute(sortOption);
-        } else {
-            int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
-            sortOption = SortOption.valueOf(selectedSortOption);
-            movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
-            if (movies!=null) {
-                displayMovies();
-            }
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // if the user is returning from the settings,  we check if the selection order was change to launch the query again.
-        if (sortOption != getSortOrderFromPreferences()) {
-            sortOption = getSortOrderFromPreferences();
-            new FetchMoviesTask(getActivity(), this).execute(sortOption);
-        }
     }
 
     @Override
@@ -155,6 +132,25 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     @Override
     public void onPreExecute() {
         UserInterfaceHelper.displayProgressDialog(getActivity(), buildDialogData(), PROGRESS_DIALOG_TAG);
+    }
+
+    /**
+     * Allows to restore the previous state of the fragment.
+     *
+     * @param savedInstanceState Previous state of the fragment..
+     */
+    private void restoreMovieState(Bundle savedInstanceState) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
+            sortOption = getSortOrderFromPreferences();
+            new FetchMoviesTask(getActivity(), this).execute(sortOption);
+        } else {
+            int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
+            sortOption = SortOption.valueOf(selectedSortOption);
+            movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
+            if (movies!=null) {
+                displayMovies();
+            }
+        }
     }
 
     /**

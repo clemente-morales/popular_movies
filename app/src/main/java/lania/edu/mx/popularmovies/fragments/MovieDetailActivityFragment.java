@@ -95,8 +95,8 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     @Override
     public void onResume() {
-        super.onResume();
         PopularMoviesApplication.getEventBus().register(this);
+        super.onResume();
     }
 
     @Override

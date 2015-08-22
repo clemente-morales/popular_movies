@@ -3,7 +3,6 @@ package lania.edu.mx.popularmovies.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,14 +11,13 @@ import com.squareup.otto.Subscribe;
 import lania.edu.mx.popularmovies.PopularMoviesApplication;
 import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.events.otto.MovieSelectionChangeEvent;
+import lania.edu.mx.popularmovies.events.otto.SortOrderChangedEvent;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 import lania.edu.mx.popularmovies.models.Movie;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
-
-    private static final String TAG = MainActivity.class.getSimpleName();
     private boolean twoPane;
 
     @Override
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (findViewById(R.id.movie_detail_container) != null) {
             twoPane = true;
-            Log.d(TAG, "two pane");
 
             if (savedInstanceState == null) {
                 getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
@@ -40,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         PopularMoviesApplication.getEventBus().register(this);
+        super.onResume();
     }
 
     @Override
@@ -74,15 +71,30 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This event occurs when a movie has been selected.
+     * @param movie Data of the movie.
+     */
     @Subscribe
     public void onItemSelected(Movie movie) {
-        Log.d(TAG, "onItemSelected");
         if (twoPane) {
             PopularMoviesApplication.getEventBus().post(new MovieSelectionChangeEvent(movie));
         } else {
             Intent intent = new Intent(this, MovieDetailActivity.class);
             intent.putExtra(MovieDetailActivityFragment.MOVIE_DETAIL_KEY, movie);
             startActivity(intent);
+        }
+    }
+
+    /**
+     * Reset the fragment to show the detail of the movie.
+     * @param event Event launched when the sort order whas changed.
+     */
+    @Subscribe
+    public void onSortOrderChanged(SortOrderChangedEvent event) {
+        if (findViewById(R.id.movie_detail_container) != null) {
+            getFragmentManager().beginTransaction().replace(R.id.movie_detail_container,
+                    new MovieDetailActivityFragment(), DETAIL_FRAGMENT_TAG).commit();
         }
     }
 }
