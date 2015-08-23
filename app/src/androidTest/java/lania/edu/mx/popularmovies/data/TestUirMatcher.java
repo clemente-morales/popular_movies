@@ -9,7 +9,7 @@ import android.test.AndroidTestCase;
  */
 public class TestUirMatcher extends AndroidTestCase {
     private static final Uri TEST_MOVIE_DIR = PopularMoviesContract.MovieEntry.CONTENT_URI;
-    public static final int ROW_ID = 23;
+    public static final String ROW_ID = "23";
 
     public void testUriMatcher() {
         UriMatcher testMatcher = PopularMoviesProvider.buildUriMatcher();
