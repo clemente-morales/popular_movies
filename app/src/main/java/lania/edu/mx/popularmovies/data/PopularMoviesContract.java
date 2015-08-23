@@ -1,7 +1,6 @@
 package lania.edu.mx.popularmovies.data;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.net.Uri;
 
 /**
@@ -22,17 +21,17 @@ public class PopularMoviesContract {
     /**
      * Path to look for movie data.
      */
-    public static final String MOVIE_PATH = "movie";
+    public static final String MOVIE_PATH = "movies";
 
     /**
      * Path to look for the videos of a movie.
      */
-    public static final String VIDEO_PATH = "video";
+    public static final String VIDEO_PATH = "videos";
 
     /**
      * Path to look for the reviews of a movie.
      */
-    public static final String REVIEW_PATH = "review";
+    public static final String REVIEW_PATH = "reviews";
 
     /**
      * Defines the contents of the Movie table.
@@ -101,8 +100,8 @@ public class PopularMoviesContract {
          * @param id Id of the movie.
          * @return Uri with the id appended to the end of the path.
          */
-        public static Uri buildMovieUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildMovieUri(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
         }
     }
 
@@ -133,8 +132,7 @@ public class PopularMoviesContract {
         /**
          * Uri to look for the videos of a movie.
          */
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
-                .appendPath("{movieId}").appendPath(VIDEO_PATH).build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(VIDEO_PATH).build();
 
         /**
          * MIME type to represent a directory with the videos of a movie.
@@ -148,13 +146,18 @@ public class PopularMoviesContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
 
+        public static Uri buildMoviePathWithVideos(long movieId) {
+            return BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
+                    .appendPath(Long.toString(movieId)).appendPath(VIDEO_PATH).build();
+        }
+
         /**
          * Creates a new uri with the id appended to the end of the path.
          * @param id Id of the video.
          * @return Uri with the id appended to the end of the path.
          */
-        public static Uri buildMovieUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildVideoUri(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
         }
     }
 
@@ -185,8 +188,7 @@ public class PopularMoviesContract {
         /**
          * Uri to look for the reviews of a movie.
          */
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
-                .appendPath("{movieId}").appendPath(REVIEW_PATH).build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(REVIEW_PATH).build();
 
         /**
          * MIME type to represent a directory with the videos of a movie.
@@ -200,13 +202,18 @@ public class PopularMoviesContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + MOVIE_PATH;
 
+        public static Uri buildMoviePathWithReviews(long movieId) {
+            return BASE_CONTENT_URI.buildUpon().appendPath(MOVIE_PATH)
+                    .appendPath(Long.toString(movieId)).appendPath(REVIEW_PATH).build();
+        }
+
         /**
          * Creates a new uri with the id appended to the end of the path.
          * @param id Id of the video.
          * @return Uri with the id appended to the end of the path.
          */
-        public static Uri buildMovieUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildReviewUri(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
         }
     }
 }

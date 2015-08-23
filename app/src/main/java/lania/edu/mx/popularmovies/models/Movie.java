@@ -72,10 +72,10 @@ public class Movie implements Parcelable {
      */
     private boolean markedAsFavorite;
 
-    // TODO Include in parcel
+
     private ArrayList<Review> reviews;
 
-    // TODO Include in parcel
+
     private ArrayList<Video> videos;
 
     /**
@@ -117,6 +117,9 @@ public class Movie implements Parcelable {
         this.backDropImageName = source.readString();
         this.voteAverage = source.readFloat();
         this.markedAsFavorite = source.readInt() == 1 ? true : false;
+        this.videos = (ArrayList<Video>) source.readSerializable();
+        this.reviews = (ArrayList<Review>) source.readSerializable();
+
     }
 
     /**
@@ -212,6 +215,8 @@ public class Movie implements Parcelable {
         dest.writeString(backDropImageName);
         dest.writeFloat(voteAverage);
         dest.writeInt(markedAsFavorite ? 1 : 0);
+        dest.writeSerializable(videos);
+        dest.writeSerializable(reviews);
     }
 
     /**

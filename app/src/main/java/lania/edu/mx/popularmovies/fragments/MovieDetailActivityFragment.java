@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -106,9 +105,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
     }
 
     private void setSharedIntent() {
-        Log.d(TAG, "setSharedIntent");
         if (movie.getVideos() != null && movie.getVideos().size() > 0) {
-            Log.d(TAG, "with videos");
             Video video = movie.getVideos().get(0);
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -125,7 +122,6 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.shareVideoMenuItem) {
-            Log.d(TAG, "onOptionsItemSelected");
             setSharedIntent();
             return true;
         }
@@ -253,12 +249,10 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
 
     private void displayExtraData() {
         if (getActivity() != null) {
-            Log.d(TAG, "Videos " + movie.getVideos());
             MovieVideosAdapter videosAdapter = new MovieVideosAdapter(getActivity(), movie.getVideos());
             ListView listView = (ListView) getView().findViewById(R.id.videosListView);
             listView.setAdapter(videosAdapter);
 
-            Log.d(TAG, "Reviews " + movie.getReviews());
             MovieReviewsAdapter reviewsAdapter = new MovieReviewsAdapter(getActivity(), movie.getReviews());
             ListView reviewsListView = (ListView) getView().findViewById(R.id.reviewsListView);
             reviewsListView.setAdapter(reviewsAdapter);

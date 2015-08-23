@@ -48,7 +48,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
     @Override
     protected DataResult<ArrayList<Movie>, Exception> doInBackground(SortOption... params) {
         SortOption sortOption = params[0];
-        return sortOption == SortOption.FAVORITE ? getFavoriteMovies() : getRealData(sortOption);
+        return sortOption == SortOption.FAVORITE ? getFavoriteMovies() : queryDataFromServer(sortOption);
     }
 
     public DataResult<ArrayList<Movie>,Exception> getFavoriteMovies() {
@@ -77,7 +77,7 @@ public class FetchMoviesTask extends AsyncTask<SortOption, Void, DataResult<Arra
         return DataResult.createDataResult(movies);
     }
 
-    private DataResult<ArrayList<Movie>, Exception> getRealData(SortOption sortOption) {
+    private DataResult<ArrayList<Movie>, Exception> queryDataFromServer(SortOption sortOption) {
         try {
             MoviesResource resource = PopularMoviesApplication.getObjectGraph().providesMoviesResource();
             MovieResponse response = resource.getMovies(sortOption.getOrder(), getKey());

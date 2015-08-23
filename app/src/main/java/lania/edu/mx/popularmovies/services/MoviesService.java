@@ -19,6 +19,8 @@ import lania.edu.mx.popularmovies.R;
 import lania.edu.mx.popularmovies.data.PopularMoviesContract;
 import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.tos.MovieConverter;
+import lania.edu.mx.popularmovies.tos.ReviewConverter;
+import lania.edu.mx.popularmovies.tos.VideoConverter;
 import lania.edu.mx.popularmovies.utils.IOHelper;
 
 /**
@@ -83,11 +85,24 @@ public class MoviesService extends IntentService {
                 projection, selection, selectionArgs, order);
         if (!movieCursor.moveToFirst()) {
             saveImage(mMovie.getPosterImageName());
-
             saveImage(mMovie.getBackDropImageName());
 
             getApplicationContext().getContentResolver().insert(PopularMoviesContract.MovieEntry.CONTENT_URI,
                     MovieConverter.toContentValues(mMovie));
+
+            Log.d(TAG, "movie data "+mMovie);
+
+            if (mMovie.getReviews() != null && mMovie.getReviews().size() > 0) {
+                Log.d(TAG, "Saving reviews");
+                getApplicationContext().getContentResolver().bulkInsert(PopularMoviesContract.ReviewEntry.CONTENT_URI,
+                        ReviewConverter.toContentValues(mMovie.getReviews()));
+            }
+
+            if (mMovie.getVideos() != null && mMovie.getVideos().size() > 0) {
+                Log.d(TAG, "Saving videos");
+                getApplicationContext().getContentResolver().bulkInsert(PopularMoviesContract.VideoEntry.CONTENT_URI,
+                        VideoConverter.toContentValues(mMovie.getVideos()));
+            }
 
             notifyResult(R.string.movieMarkAsFavorite);
         } else {

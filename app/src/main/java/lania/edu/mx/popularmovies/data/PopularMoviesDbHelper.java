@@ -12,7 +12,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
     /**
      * Scheme version of the data base.
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 7;
 
     /**
      * Name of the database.
@@ -32,7 +32,7 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + PopularMoviesContract.MovieEntry.TABLE_NAME + " (" +
-                PopularMoviesContract.MovieEntry.ID + " INTEGER PRIMARY KEY," +
+                PopularMoviesContract.MovieEntry.ID + " TEXT PRIMARY KEY," +
                 PopularMoviesContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_SYNOPSIS + " TEXT NULL," +
                 PopularMoviesContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL," +
@@ -42,14 +42,14 @@ public class PopularMoviesDbHelper extends SQLiteOpenHelper {
                 PopularMoviesContract.MovieEntry.COLUMN_BACKDROP_IMAGE + " TEXT NULL);";
 
         final String SQL_CREATE_VIDEO_TABLE = "CREATE TABLE " + PopularMoviesContract.VideoEntry.TABLE_NAME + " (" +
-                PopularMoviesContract.VideoEntry.ID + " INTEGER PRIMARY KEY," +
-                PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID + " INT NOT NULL," +
+                PopularMoviesContract.VideoEntry.ID + " TEXT PRIMARY KEY," +
+                PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL," +
                 PopularMoviesContract.VideoEntry.COLUMN_NAME + " TEXT NOT NULL," +
                 PopularMoviesContract.VideoEntry.COLUMN_KEY + " TEXT NOT NULL);";
 
         final String SQL_CREATE_REVIEW_TABLE = "CREATE TABLE " + PopularMoviesContract.ReviewEntry.TABLE_NAME + " (" +
-                PopularMoviesContract.ReviewEntry.ID + " INTEGER PRIMARY KEY," +
-                PopularMoviesContract.ReviewEntry.COLUMN_MOVIE_ID + " INT NOT NULL," +
+                PopularMoviesContract.ReviewEntry.ID + " TEXT PRIMARY KEY," +
+                PopularMoviesContract.ReviewEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL," +
                 PopularMoviesContract.ReviewEntry.COLUMN_AUTHOR + " TEXT NOT NULL," +
                 PopularMoviesContract.ReviewEntry.COLUMN_CONTENT + " TEXT NOT NULL);";
 
