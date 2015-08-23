@@ -97,10 +97,9 @@ public class TestUtilities extends AndroidTestCase {
     public static ContentValues createVideoDummyValues(long movieId) {
         ContentValues values = new ContentValues();
         values.put(PopularMoviesContract.VideoEntry.ID, movieId);
-        values.put(PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID, movieId);
-        values.put(PopularMoviesContract.VideoEntry.COLUMN_KEY, "");
-        values.put(PopularMoviesContract.VideoEntry.COLUMN_NAME, "");
-        values.put(PopularMoviesContract.VideoEntry.CONTENT_ITEM_TYPE, "");
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_MOVIE_ID, Long.toString(movieId));
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_KEY, "ttre");
+        values.put(PopularMoviesContract.VideoEntry.COLUMN_NAME, "trerte");
         return values;
     }
 
