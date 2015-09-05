@@ -13,6 +13,8 @@
     <string name="error_connection_message">Error getting the data. Try it later.</string>
     <string name="movieDetail_shared_video">Share</string>
     <string name="movieDetail_no_thrillers_to_share">You don\'t have thrillers to share.</string>
+    <string name="movieList_noData">No movies available.</string>
+    <string name="movieList_noInternetConnection">No movies information available. The network is not available to fetch movies.</string>
 
     <!-- Movie settings-->
     <string name="action_settings">Movie Settings</string>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         super.onActivityCreated(savedInstanceState);
 
         GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+        gridview.setEmptyView(getView().findViewById(R.id.noDataTextView));
 
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,10 +117,15 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         UserInterfaceHelper.deleteProgressDialog(getActivity(), PROGRESS_DIALOG_TAG);
         if (!moviesResult.isException()) {
             this.movies = moviesResult.getData();
-            displayMovies();
         } else {
-            Toast.makeText(getActivity(),R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+            this.movies = new ArrayList<>();
+            if (!UserInterfaceHelper.isNetworkAvailable(getActivity())) {
+                TextView noDataTextView = (TextView) getView().findViewById(R.id.noDataTextView);
+                noDataTextView.setText(R.string.movieList_noInternetConnection);
+            } else
+                Toast.makeText(getActivity(), R.string.error_connection_message, Toast.LENGTH_SHORT).show();
         }
+        displayMovies();
     }
 
     private void displayMovies() {

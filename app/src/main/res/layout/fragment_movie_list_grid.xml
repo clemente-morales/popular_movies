@@ -15,4 +15,12 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         />
+    <TextView
+        android:id="@+id/noDataTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:freezesText="true"
+        android:padding="16dp"
+        android:text="@string/movieList_noData"/>
 </FrameLayout>
