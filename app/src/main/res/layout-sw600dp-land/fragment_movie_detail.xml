@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/movieTitleTextView"
                 android:layout_toRightOf="@id/movieThumbailImageView"
-                android:text="@string/movieReleaseDateLabel"
+                android:text="@string/movieDetail_releaseDateLabel"
                 android:textStyle="bold" />
 
             <TextView
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="#009688"
-            android:text="@string/movieMarkAsFavoriteButton" />
+            android:text="@string/movieDetail_markAsFavoriteButton" />
 
         <View
             android:id="@+id/traillersViewLine"
@@ -84,7 +84,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/videosTextViewLabel"
+            android:text="@string/movieDetail_videosTextViewLabel"
             android:textStyle="bold"/>
 
         <ListView
@@ -102,7 +102,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reviewsTextViewLabel"
+            android:text="@string/movieDetail_reviewsTextViewLabel"
             android:textStyle="bold"/>
 
         <ListView

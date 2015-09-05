@@ -114,7 +114,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
         }else {
-            Toast.makeText(getActivity(), getString(R.string.movieDetail_no_thrillers_to_share), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.movieDetail_noThrillersToShareMessage), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -243,7 +243,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
             this.movie = data.getData();
             displayExtraData();
         } else {
-            Toast.makeText(getActivity(), R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.movieList_errorConnectingToServerMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -265,7 +265,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
      * @return Data to show in the indeterminate progress dialog.
      */
     private DialogData buildDialogData() {
-        return new DialogData(R.string.app_name, R.string.message_progress_bar, false,
+        return new DialogData(R.string.app_name, R.string.movieList_progressBarMessage, false,
                 android.R.drawable.ic_dialog_alert);
     }
 }

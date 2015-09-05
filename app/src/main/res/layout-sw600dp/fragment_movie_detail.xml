@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/movieThumbailImageView"
-                android:text="@string/movieReleaseDateLabel"
+                android:text="@string/movieDetail_releaseDateLabel"
                 android:textStyle="bold" />
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
                 android:background="#009688"
-                android:text="@string/movieMarkAsFavoriteButton" />
+                android:text="@string/movieDetail_markAsFavoriteButton" />
 
             <TextView
                 android:id="@+id/movieSynopsisTextView"
@@ -81,7 +81,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/videosTextViewLabel"
+            android:text="@string/movieDetail_videosTextViewLabel"
             android:textStyle="bold"/>
 
         <ListView
@@ -99,7 +99,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reviewsTextViewLabel"
+            android:text="@string/movieDetail_reviewsTextViewLabel"
             android:textStyle="bold"/>
 
         <ListView

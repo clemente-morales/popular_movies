@@ -1,34 +1,37 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name" translatable="false">Popular Movies</string>
 
-    <!-- Movie data-->
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
-    <string name="movieTitleLabel">Title:\u0020</string>
-    <string name="movieReleaseDateLabel">Release date:\u0020</string>
-    <string name="movieMarkAsFavoriteButton">Mark as favorite</string>
-    <string name="movieMarkAsFavorite">Movie %s marked as favorite.</string>
-    <string name="movieAlreadyMarkAsFavorite">The movie %s has already marked as favorite.</string>
-    <string name="movieVideosHeader">Trailers</string>
-    <string name="message_progress_bar">Loading data...</string>
-    <string name="error_connection_message">Error getting the data. Try it later.</string>
-    <string name="movieDetail_shared_video">Share</string>
-    <string name="movieDetail_no_thrillers_to_share">You don\'t have thrillers to share.</string>
+    <!--List of movies-->
+    <string name="movieList_progressBarMessage">Loading data...</string>
+    <string name="movieList_errorConnectingToServerMessage">Error getting the data. Try again later.</string>
     <string name="movieList_noData">No movies available.</string>
     <string name="movieList_noInternetConnection">No movies information available. The network is not available to fetch movies.</string>
 
+    <!-- Movie detail-->
+    <string name="movieDetail_title">Popular Movies</string>
+    <string name="movieDetail_movieTitleLabel">Title:\u0020</string>
+    <string name="movieDetail_releaseDateLabel">Release date:\u0020</string>
+    <string name="movieDetail_markAsFavoriteButton">Mark as favorite</string>
+    <string name="movieDetail_movieMarkedAsFavoriteMessage">Movie %s marked as favorite.</string>
+    <string name="movieDetail_movieAlreadyMarkedAsFavoriteMessage">The movie %s has already marked as favorite.</string>
+    <string name="movieDetail_videosHeader">Trailers</string>
+    <string name="movieDetail_shared_video">Share</string>
+    <string name="movieDetail_noThrillersToShareMessage">You don\'t have thrillers to share.</string>
+    <string name="movieDetail_videosTextViewLabel">Trailers</string>
+    <string name="movieDetail_reviewsTextViewLabel">Reviews</string>
+
     <!-- Movie settings-->
-    <string name="action_settings">Movie Settings</string>
+    <string name="movieSettings_settingsTitle">Settings</string>
     <string name="preferences_order_title">Sort Order</string>
     <string name="preferences_order_key">movieQuerySortOrder</string>
     <string name="preferences_order_default_value">1</string>
 
 
-    <!-- Retrofit -->
+    <!-- Retrofit exceptions -->
     <string name="RetrofitError_unable_to_connect">Could not establish connection.</string>
     <string name="RetrofitError_not_response_back">Not response back from server.</string>
     <string name="RetrofitError_unauthorized">You are unauthorized to execute this operation.</string>
     <string name="RetrofitError_resource_not_found">Resource not found.</string>
     <string name="RetrofitError_internal_server_error">Internal server error. Contac technical support.</string>
-    <string name="videosTextViewLabel">Traillers</string>
-    <string name="reviewsTextViewLabel">Reviews</string>
+
 </resources>

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/movieThumbailImageView"
-        android:text="@string/movieTitleLabel"
+        android:text="@string/movieDetail_movieTitleLabel"
         android:textStyle="bold" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/movieTitleTextView"
         android:layout_toRightOf="@id/movieThumbailImageView"
-        android:text="@string/movieReleaseDateLabel"
+        android:text="@string/movieDetail_releaseDateLabel"
         android:textStyle="bold" />
 
     <TextView

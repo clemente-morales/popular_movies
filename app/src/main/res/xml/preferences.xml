@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <PreferenceCategory android:title="@string/action_settings">
+    <PreferenceCategory android:title="@string/movieSettings_settingsTitle">
         <ListPreference
             android:dialogTitle="@string/preferences_order_title"
             android:defaultValue="@string/preferences_order_default_value"

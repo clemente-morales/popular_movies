@@ -104,9 +104,9 @@ public class MoviesService extends IntentService {
                         VideoConverter.toContentValues(mMovie.getVideos()));
             }
 
-            notifyResult(R.string.movieMarkAsFavorite);
+            notifyResult(R.string.movieDetail_movieMarkedAsFavoriteMessage);
         } else {
-            notifyResult(R.string.movieAlreadyMarkAsFavorite);
+            notifyResult(R.string.movieDetail_movieAlreadyMarkedAsFavoriteMessage);
         }
         movieCursor.close();
     }

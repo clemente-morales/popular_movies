@@ -123,7 +123,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
                 TextView noDataTextView = (TextView) getView().findViewById(R.id.noDataTextView);
                 noDataTextView.setText(R.string.movieList_noInternetConnection);
             } else
-                Toast.makeText(getActivity(), R.string.error_connection_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.movieList_errorConnectingToServerMessage, Toast.LENGTH_SHORT).show();
         }
         displayMovies();
     }
@@ -184,7 +184,7 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      * @return Data to show in the indeterminate progress dialog.
      */
     private DialogData buildDialogData() {
-        return new DialogData(R.string.app_name, R.string.message_progress_bar, false, android.R.drawable.ic_dialog_alert);
+        return new DialogData(R.string.app_name, R.string.movieList_progressBarMessage, false, android.R.drawable.ic_dialog_alert);
     }
 
     /**

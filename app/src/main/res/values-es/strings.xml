@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Popular Movies</string>
+
+    <!--List of movies-->
+    <string name="movieList_progressBarMessage">Consultando información...</string>
+    <string name="movieList_errorConnectingToServerMessage">Error consultando la información. Intente mas tarde.</string>
+    <string name="movieList_noData">No existen películas disponibles.</string>
+    <string name="movieList_noInternetConnection">No existen películas disponibles. La red no está disponible para ejecutar la consulta.</string>
+
+    <!-- Movie detail-->
+    <string name="movieDetail_title">Popular Movies</string>
+    <string name="movieDetail_movieTitleLabel">Título:\u0020</string>
+    <string name="movieDetail_releaseDateLabel">Fecha de estreno:\u0020</string>
+    <string name="movieDetail_markAsFavoriteButton">Marcar como favorita</string>
+    <string name="movieDetail_movieMarkedAsFavoriteMessage">La película %s ha sido marcada como favorita.</string>
+    <string name="movieDetail_movieAlreadyMarkedAsFavoriteMessage">La película %s ya ha sido marcada como favorita previamente.</string>
+    <string name="movieDetail_videosHeader">Trailers</string>
+    <string name="movieDetail_shared_video">Compartir</string>
+    <string name="movieDetail_noThrillersToShareMessage">No tienes trailer para compartir.</string>
+    <string name="movieDetail_videosTextViewLabel">Trailers</string>
+    <string name="movieDetail_reviewsTextViewLabel">Comentarios</string>
+
+    <!-- Movie settings-->
+    <string name="movieSettings_settingsTitle">Configuraciones</string>
+    <string name="preferences_order_title">Criterio de consulta</string>
+    <string name="preferences_order_key">movieQuerySortOrder</string>
+    <string name="preferences_order_default_value">1</string>
+
+
+    <!-- Retrofit exceptions -->
+    <string name="RetrofitError_unable_to_connect">No se ha podido establecer una conexión con el servidor.</string>
+    <string name="RetrofitError_not_response_back">El servidor no ha regresado una respuesta.</string>
+    <string name="RetrofitError_unauthorized">No autorizado para ejecutar la operación.</string>
+    <string name="RetrofitError_resource_not_found">Recurso no disponible.</string>
+    <string name="RetrofitError_internal_server_error">Error interno en el servidor. Contacta a soporte técnico.</string>
+
+</resources>
