@@ -8,6 +8,13 @@
     android:orientation="horizontal"
     tools:context="lania.edu.mx.popularmovies.activities.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize">
+    </android.support.v7.widget.Toolbar>
+
     <fragment
         android:name="lania.edu.mx.popularmovies.fragments.MovieListFragment"
         android:layout_width="0dp"

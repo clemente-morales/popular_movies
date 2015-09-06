@@ -2,7 +2,8 @@ package lania.edu.mx.popularmovies.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,7 +16,7 @@ import lania.edu.mx.popularmovies.events.otto.SortOrderChangedEvent;
 import lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment;
 import lania.edu.mx.popularmovies.models.Movie;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
 
     public static final String DETAIL_FRAGMENT_TAG = "MovielDetailFragmentTag";
     private boolean twoPane;
@@ -24,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (findViewById(R.id.movie_detail_container) != null) {
             twoPane = true;

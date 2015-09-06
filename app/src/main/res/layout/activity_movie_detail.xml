@@ -1,5 +1,21 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
-    android:name="lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment"
-    tools:layout="@layout/fragment_movie_detail" android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize">
+    </android.support.v7.widget.Toolbar>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="lania.edu.mx.popularmovies.fragments.MovieDetailActivityFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_movie_detail" />
+
+</LinearLayout>
