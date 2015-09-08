@@ -17,11 +17,20 @@ import lania.edu.mx.popularmovies.models.Movie;
 import lania.edu.mx.popularmovies.utils.IOHelper;
 
 /**
+ * Adapter used to display images in the Grid View for the requested movies.
  * Created by clemente on 7/29/15.
  */
 public class MovieListGridAdapter extends BaseAdapter {
+    /**
+     * Id for the class in the log of events.
+     */
     private static final String TAG = MovieListGridAdapter.class.getSimpleName();
+
+    /**
+     * Format to query the image for a movie.
+     */
     public static final String MOVIE_IMAGE_URL_FORMAT = "http://image.tmdb.org/t/p/w185/%s";
+
     /**
      * Context to inflate the views.
      */
@@ -71,14 +80,16 @@ public class MovieListGridAdapter extends BaseAdapter {
         }
 
         Movie movie = movies.get(position);
-
+        Log.d(TAG, "Displaying the movie "+movie);
         if (movie.isMarkedAsFavorite()) {
             File folder = IOHelper.getDataFolder(context, Movie.IMAGE_PATH);
             File imageFile = new File(folder, movie.getPosterImageName());
             Log.d(TAG, "" + imageFile);
             Picasso.with(context).load(imageFile).into(imageView);
         } else {
+            Log.d(TAG, "Displaying image "+movie.getPosterImageName());
             displayImage(String.format(MOVIE_IMAGE_URL_FORMAT, movie.getPosterImageName()), imageView);
+            Log.d(TAG, "image displayed");
         }
 
         return imageView;

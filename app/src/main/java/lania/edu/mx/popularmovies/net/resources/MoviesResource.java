@@ -18,5 +18,5 @@ public interface MoviesResource {
     ReviewsResponse getReviews(@Path("id") int id, @Query("api_key") String key);
 
     @GET("/movie/{id}/videos")
-    VideosResponse getVideos(@Path("id") int id, @Query("api_key") String key);
+    VideosResponse getVideos(@Path("id") int id, @Query("apia_key") String key);
 }

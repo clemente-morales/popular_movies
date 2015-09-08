@@ -2,9 +2,7 @@
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
+    android:popupTheme="@android:style/ThemeOverlay.Material.Light"
     android:minHeight="?attr/actionBarSize">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@android:drawable/sym_def_app_icon"/>
 </android.support.v7.widget.Toolbar>

@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -203,7 +205,7 @@ public class MovieDetailActivityFragment extends Fragment implements FetchMovieD
      */
     private String formatDate(Date releaseDate) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(releaseDate);
+        return releaseDate == null ? StringUtils.EMPTY : simpleDateFormat.format(releaseDate);
     }
 
     /**

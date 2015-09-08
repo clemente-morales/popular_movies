@@ -55,13 +55,15 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
             throws IOException, JsonParseException {
         SimpleDateFormat format = new SimpleDateFormat(formatoFecha);
 
-        String date = jsonParser.getText();
+        String stringDate = jsonParser.getText();
 
+        Date date = new Date(System.currentTimeMillis());
         try {
-            return format.parse(date);
+            date = format.parse(stringDate);
         } catch (ParseException e) {
-            Log.e(TAG, "Error al parsear la fecha " + date, e);
-            throw new RuntimeException(e);
+            Log.e(TAG, "Error al parsear la fecha " + stringDate, e);
         }
+
+        return date;
     }
 }

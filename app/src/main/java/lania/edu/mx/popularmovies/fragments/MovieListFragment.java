@@ -4,12 +4,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +70,6 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         super.onActivityCreated(savedInstanceState);
 
         GridView gridview = (GridView) getView().findViewById(R.id.gridview);
-        gridview.setEmptyView(getView().findViewById(R.id.noDataTextView));
-
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,15 +86,16 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
     @Override
     public void onResume() {
         PopularMoviesApplication.getEventBus().register(this);
-        super.onResume();
 
         // if the user is returning from the settings,  we check if the selection order was change
         // to launch the query again.
-        if (sortOption != getSortOrderFromPreferences()) {
+        if (sortOption == null || sortOption != getSortOrderFromPreferences()) {
             PopularMoviesApplication.getEventBus().post(new SortOrderChangedEvent());
             sortOption = getSortOrderFromPreferences();
             new FetchMoviesTask(getActivity(), this).execute(sortOption);
         }
+
+        super.onResume();
     }
 
     @Override
@@ -118,20 +117,28 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
         if (!moviesResult.isException()) {
             this.movies = moviesResult.getData();
         } else {
+            Log.d(TAG, "We dont have movies to display.");
+            GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+            TextView noDataTextView = (TextView) getView().findViewById(R.id.noDataTextView);
+            noDataTextView.setText(R.string.movieList_noData);
             this.movies = new ArrayList<>();
             if (!UserInterfaceHelper.isNetworkAvailable(getActivity())) {
-                TextView noDataTextView = (TextView) getView().findViewById(R.id.noDataTextView);
                 noDataTextView.setText(R.string.movieList_noInternetConnection);
-            } else
+            } else {
                 Toast.makeText(getActivity(), R.string.movieList_errorConnectingToServerMessage, Toast.LENGTH_SHORT).show();
+            }
+            gridview.setEmptyView(noDataTextView);
         }
         displayMovies();
     }
 
+    /**
+     * Allows to display the movies.
+     */
     private void displayMovies() {
         if (getActivity() != null) {
             MovieListGridAdapter adapter = new MovieListGridAdapter(getActivity(), movies);
-            GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+            GridView gridview = (GridView) getActivity().findViewById(R.id.gridview);
             gridview.setAdapter(adapter);
         }
     }
@@ -147,17 +154,16 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      * @param savedInstanceState Previous state of the fragment..
      */
     private void restoreMovieState(Bundle savedInstanceState) {
-        if (savedInstanceState == null || !savedInstanceState.containsKey(LIST_OF_MOVIES_KEY)) {
-            sortOption = getSortOrderFromPreferences();
-            new FetchMoviesTask(getActivity(), this).execute(sortOption);
-        } else {
-            int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
-            sortOption = SortOption.valueOf(selectedSortOption);
-            movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
-            if (movies!=null) {
-                displayMovies();
-            }
+        if (savedInstanceState == null)
+            return;
+
+        int selectedSortOption = savedInstanceState.getInt(SELECTED_SORT_OPTION_KEY);
+        sortOption = SortOption.valueOf(selectedSortOption);
+        movies = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES_KEY);
+        if (movies != null) {
+            displayMovies();
         }
+
     }
 
     /**
@@ -185,14 +191,5 @@ public class MovieListFragment extends Fragment implements FetchMoviesTask.Movie
      */
     private DialogData buildDialogData() {
         return new DialogData(R.string.app_name, R.string.movieList_progressBarMessage, false, android.R.drawable.ic_dialog_alert);
-    }
-
-    /**
-     * Returns the ListView control to display the movies.
-     *
-     * @return ListView control to display the movies.
-     */
-    private ListView getMoviesListView() {
-        return (ListView) getActivity().findViewById(R.id.moviesListView);
     }
 }
